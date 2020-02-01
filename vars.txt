@@ -13,6 +13,14 @@ r Interaction_Range 2 hidden
 vr Sight_Range 3 hidden
 harvesters_. Scavenge 0 hidden
 harvesters_f Harvest 2 hidden
-harvesters_m Mine 0 hidden
+harvesters_m Mine 1 hidden
 harvesters_v Send_Traders 1 hidden
 harvesters_w Carry_Water 2 hidden
+harvesters_b Loot 0 hidden
+harvesters_F Harvest 2 hidden
+harvesters_- Collect 1 hidden
+harvesters_R Scavenge 2 hidden
+harvesters_H Collect 1 hidden
+harvesters_C Mine 1 hidden
+whip Forcible_Steering 0 hidden
+harness Steering_Harness 0 hidden

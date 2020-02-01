@@ -479,11 +479,11 @@ function getSteeringType(myDy) {
 	for (var dy = -1; dy < 2; dy++) {
 		var t = map[v("y") + dy][v("x") + 1];
 		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
-		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
+		if (attraction > highestAttraction || (attraction >= highestAttraction && myDy == dy)) {
 			highestAttraction = dy;
 		}
 	}
-	if (highestAttraction == dy) {
+	if (highestAttraction == myDy) {
 		return steeringTypes[0];
 	}
 	var t = map[v("y") + myDy][v("x") + 1];
