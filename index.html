@@ -494,18 +494,21 @@ function inSightRadius(x, y) {
 
 function getSteeringType(myDy) {
 	var highestAttraction = -100;
+	var highestAttractionY = -100;
 	for (var dy = -1; dy < 2; dy++) {
 		var t = map[v("y") + dy][v("x") + 1];
 		if (t.type.wall) { continue; }
 		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
 		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
-			highestAttraction = dy;
+			highestAttraction = attraction;
+			highestAttractionY = dy;
 		}
 	}
-	if (highestAttraction == myDy) {
+	if (highestAttractionY == myDy) {
 		return steeringTypes[0];
 	}
 	var t = map[v("y") + myDy][v("x") + 1];
+	if (t.type.wall) { return null; }
 	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
 	for (var i = 0; i < steeringTypes.length; i++) {
 		var st = steeringTypes[i];
