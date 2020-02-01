@@ -181,7 +181,8 @@ function loadMap() {
 					map[y].push({
 						type: type,
 						x: x,
-						y: y
+						y: y,
+						harvesters: 0
 					});
 				} else {
 					console.log("Type ? " + row.charAt(x));
@@ -197,6 +198,18 @@ load();
 function turn() {
 	setV("mvCooldown", v("mvCooldown") - 1);
 	setV("%", Math.floor((Math.random() * 100) + 1));
+	for (var y = 0; y < map.length; y++) {
+		for (var x = 0; x < map[y].length; x++) {
+			var tile = map[y][x];
+			if (!inRadius(x, y) || (x == v("x") && y == v("y"))) {
+				tile.harvesters = 0;
+				continue;
+			}
+			for (var i = 0; i < tile.harvesters; i++) {
+				effects(tile.type.harvest);
+			}
+		}
+	}
 }
 
 function move(dx, dy) {
@@ -204,6 +217,10 @@ function move(dx, dy) {
 	setV("x", v("x") + dx);
 	setV("y", v("y") + dy);
 	effects(map[v("y")][v("x")].type.graze);
+}
+
+function inRadius(x, y) {
+	return (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < v("r") * v("r");
 }
 
 function tick(ms) {
@@ -216,8 +233,10 @@ function tick(ms) {
 	for (var y = 0; y < map.length; y++) {
 		for (var x = 0; x < map[y].length; x++) {
 			img(map[y][x].type.img, x * TILESZ + xScroll, y * TILESZ + yScroll);
-			var distSq = (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y"));
-			if (distSq >= v("r") * v("r")) {
+			for (var i = 0; i < map[y][x].harvesters; i++) {
+				img("Hammer", x * TILESZ + xScroll + 10 - 10 * map[y][x].harvesters + i * 20, y * TILESZ + yScroll);
+			}
+			if (!inRadius(x, y)) {
 				c.fillRect(x * TILESZ + xScroll, y * TILESZ + yScroll, TILESZ, TILESZ);
 			}
 		}
@@ -241,8 +260,25 @@ function tick(ms) {
 			}
 		}
 	} else {
-		if (click) {
-			turn();
+		c.fillStyle = "rgba(255, 255, 255, 0.5)";
+		for (var y = 0; y < map.length; y++) {
+			for (var x = 0; x < map[y].length; x++) {
+				var tile = map[y][x];
+				if (!inRadius(x, y) || (x == v("x") && y == v("y"))) {
+					tile.harvesters = 0;
+					continue;
+				}
+				if (tile.type.harvest.length == 0) { continue; }
+				var screenX = x * TILESZ + xScroll;
+				var screenY = y * TILESZ + yScroll;
+				if (cursor.x > screenX && cursor.x < screenX + TILESZ && cursor.y > screenY && cursor.y < screenY + TILESZ) {
+					c.fillRect(screenX, screenY, TILESZ, TILESZ);
+					if (click) {
+						tile.harvesters++;
+						turn();
+					}
+				}
+			}
 		}
 	}
 	

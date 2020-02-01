@@ -1,6 +1,11 @@
+hunger Hunger 0 min 0
+food Food 10 min 0
+water Water 10 min 0
+wood Wood 10 min 0
+meds Medicine 0 min 0
+$ Trade_Goods 0 min 0
 x x 2 hidden
 y y 2 hidden
 % % 0 hidden
 mvCooldown Move_Cooldown 3 hidden
 r Radius 3 hidden
-hunger Hunger 0 min 0
