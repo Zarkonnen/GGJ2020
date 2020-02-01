@@ -1,3 +1,7 @@
+Scouts
+	test wood >= 30
+	effects wood - 30 vr = 4
+
 Stables
-	test wood >= 50
-	effects wood - 50 r = 3
+	test wood >= 100
+	effects wood - 100 r = 3

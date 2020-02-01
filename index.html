@@ -419,7 +419,11 @@ function move(dx, dy) {
 }
 
 function inRadius(x, y) {
-	return (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < v("r") * v("r");
+	return inSightRadius(x, y) && (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < v("r") * v("r");
+}
+
+function inSightRadius(x, y) {
+	return (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < v("vr") * v("vr");
 }
 
 function tick(ms) {
@@ -431,6 +435,9 @@ function tick(ms) {
 	var yScroll = canvas.height / 2 - v("y") * TILESZ;
 	for (var y = 0; y < map.length; y++) {
 		for (var x = 0; x < map[y].length; x++) {
+			if (!inSightRadius(x, y)) {
+				continue;
+			}
 			img(map[y][x].type.img, x * TILESZ + xScroll, y * TILESZ + yScroll);
 			for (var i = 0; i < map[y][x].harvesters; i++) {
 				img("Hammer", x * TILESZ + xScroll + 10 - 10 * map[y][x].harvesters + i * 20, y * TILESZ + yScroll);
@@ -535,6 +542,16 @@ function tick(ms) {
 			c.fillRect(420, 55, 400, 30);
 			c.fillStyle = "black";
 			c.fillText(v("mvCooldown") + " turns until the animal moves.", 440, 75);
+			c.fillStyle = "grey";
+			if (cursor.x > 840 && cursor.x < 980 && cursor.y > 20 && cursor.y < 50) {
+				c.fillStyle = "white";
+				if (click) {
+					turn();
+				}
+			}
+			c.fillRect(840, 20, 140, 30);
+			c.fillStyle = "black";
+			c.fillText("Skip Turn", 860, 40);
 			c.fillStyle = "rgba(255, 255, 255, 0.5)";
 			for (var y = 0; y < map.length; y++) {
 				for (var x = 0; x < map[y].length; x++) {
@@ -543,7 +560,7 @@ function tick(ms) {
 						tile.harvesters = 0;
 						continue;
 					}
-					if (tile.type.harvest.length == 0 && !(!tile.done && tile.type.events.length > 0)) { continue; }
+					if ((tile.type.harvest.length == 0 || tile.harvesters >= v("harvesters_" + tile.type.symbol)) && !(!tile.done && tile.type.events.length > 0)) { continue; }
 					var screenX = x * TILESZ + xScroll;
 					var screenY = y * TILESZ + yScroll;
 					if (cursor.x > screenX && cursor.x < screenX + TILESZ && cursor.y > screenY && cursor.y < screenY + TILESZ) {
