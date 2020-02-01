@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html style="margin: 0; padding: 0;">
+    <head>
+        <title>Game</title>
+        <script src="jquery-3.1.1.min.js"></script>
+        <script src="howler.min.js"></script>
+    </head>
+    <body style="margin: 0; padding: 0; background: black;">
+        <canvas width="1900" height="1000" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
+        <script>
+
+function hwl(name, volume) {
+    return new Howl({src: ["sounds/" + name + ".ogg", "sounds/" + name + ".mp3", "sounds/" + name + ".wav"], volume: volume || 1});
+}
+
+function tick(ms) {
+    c.resetTransform();
+    c.fillStyle = "red";
+    c.fillRect(0, 0, canvas.width, canvas.height);
+}
+
+var images = {};
+
+function img(img, x, y) {
+    if (img == null) { return; }
+    if (!images[img]) {
+        images[img] = new Image();
+        images[img].src = "graphics/" + img + ".png";
+    }
+    c.drawImage(images[img], x, y);
+}
+
+var canvas = document.getElementById("gameCanvas");
+var c = canvas.getContext("2d");
+var keys = {};
+var keyCodes = {};
+var click = null;
+var mouseDown = false;
+var cursor = {x: 300, y: 300};
+
+// Listen for key presses.
+function canvasKeyUp(e) {
+    keyCodes[e.which] = true;
+    keys[String.fromCharCode(e.which)] = true;
+}
+
+function pressed(key) {
+    return !!keys[key] || !!keyCodes[key];
+}
+
+$('body').keyup(canvasKeyUp);
+
+// Listen for mouse stuff.
+function canvasClick(e) {
+    click = { "x": e.offsetX, "y": e.offsetY };
+}
+
+function canvasMouseDown(e) {
+    mouseDown = true;
+}
+
+function canvasMouseUp(e) {
+    mouseDown = false;
+}
+
+function canvasMove(e) {
+    cursor = { "x": e.offsetX, "y": e.offsetY };
+}
+
+$('#gameCanvas').click(canvasClick).mousemove(canvasMove).mousedown(canvasMouseDown).mouseup(canvasMouseUp);
+
+// Set up game loop.
+var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+var lastUpdate = new Date().getTime();
+
+function nextFrame() {
+    var currentTime = new Date().getTime();
+    tick(currentTime - lastUpdate);
+    keys = {};
+    keyCodes = {};
+    click = null;
+    lastUpdate = currentTime;
+    requestAnimationFrame(nextFrame);
+}
+
+// Once everything is set up, start game loop.
+requestAnimationFrame(nextFrame);
+
+canvas.addEventListener("click", function() {
+    if (canvas.webkitRequestFullScreen) {
+        canvas.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    } else if (canvas.mozRequestFullScreen) {
+        canvas.mozRequestFullScreen();
+    } else if (canvas.requestFullScreen) {
+        canvas.requestFullScreen();
+    }
+});
+        </script>
+    </body>
+</html>
