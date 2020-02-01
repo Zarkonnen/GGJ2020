@@ -1,5 +1,8 @@
 . Desert
+	graze hunger + 2
 f Forest
+	graze hunger - 1
 m Mountains
+	wall
 v Village
 w Water
