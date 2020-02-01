@@ -1,2 +1,16 @@
 upkeep
 	effects mvCooldown - 1 food - 1 water - 1 hunger + 1
+
+sellWood
+	text The villagers ask to buy wood.
+	option Sell wood
+		test wood >= 20
+		effects wood - 20 $ + 5
+	option Don't
+
+buyWater
+	text The villagers offer to sell water.
+	option Buy water
+		test $ >= 3
+		effects water + 10 $ - 3
+	option Don't
