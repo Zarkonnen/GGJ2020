@@ -13,6 +13,8 @@ function hwl(name, volume) {
     return new Howl({src: ["sounds/" + name + ".ogg", "sounds/" + name + ".mp3", "sounds/" + name + ".wav"], volume: volume || 1});
 }
 
+const TILESZ = 100;
+
 // Load data
 function ajax(file, callback) {
 	jQuery.ajax({
@@ -21,10 +23,65 @@ function ajax(file, callback) {
 	});
 }
 
+var tileTypes = {};
+var map = [];
+var ready = false;
+
+function load() {
+	ajax("tiletypes.txt", function(data) {
+		tileTypes = {};
+		var lines = data.split("\n");
+		var tt = null;
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i];
+			tt = {
+				symbol: l.split(" ")[0],
+				img: l.split(" ")[1],
+				name: l.split(" ")[1]
+			};
+			tileTypes[tt.symbol] = tt;
+		}
+		console.log(tileTypes);
+		loadMap();
+	});
+}
+
+function loadMap() {
+	ajax("map.txt", function(data) {
+		map = [];
+		var lines = data.split("\n");
+		var tt = null;
+		for (var y = 0; y < lines.length; y++) {
+			var row = lines[y];
+			map.push([]);
+			for (var x = 0; x < row.length; x++) {
+				var type = tileTypes[row.charAt(x)];
+				if (type) {
+					map[y].push({
+						type: type,
+						x: x,
+						y: y
+					});
+				} else {
+					console.log("Type ? " + row.charAt(x));
+				}
+			}
+		}
+		ready = true;
+	});
+}
+
+load();
+
 function tick(ms) {
     c.resetTransform();
     c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
+	for (var y = 0; y < map.length; y++) {
+		for (var x = 0; x < map[y].length; x++) {
+			img(map[y][x].type.img, x * TILESZ, y * TILESZ);
+		}
+	}
 }
 
 var images = {};
@@ -83,7 +140,9 @@ var lastUpdate = new Date().getTime();
 
 function nextFrame() {
     var currentTime = new Date().getTime();
-    tick(currentTime - lastUpdate);
+	if (ready) {
+		tick(currentTime - lastUpdate);
+	}
     keys = {};
     keyCodes = {};
     click = null;
@@ -94,7 +153,7 @@ function nextFrame() {
 // Once everything is set up, start game loop.
 requestAnimationFrame(nextFrame);
 
-canvas.addEventListener("click", function() {
+/*canvas.addEventListener("click", function() {
     if (canvas.webkitRequestFullScreen) {
         canvas.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
     } else if (canvas.mozRequestFullScreen) {
@@ -102,7 +161,7 @@ canvas.addEventListener("click", function() {
     } else if (canvas.requestFullScreen) {
         canvas.requestFullScreen();
     }
-});
+});*/
         </script>
     </body>
 </html>

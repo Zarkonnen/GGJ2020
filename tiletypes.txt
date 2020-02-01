@@ -1,0 +1,5 @@
+. Desert
+f Forest
+m Mountains
+v Village
+w Water
