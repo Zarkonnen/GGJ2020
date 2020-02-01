@@ -660,6 +660,15 @@ function tick(ms) {
 					var screenY = y * TILESZ + yScroll;
 					if (cursor.x > screenX && cursor.x < screenX + TILESZ && cursor.y > screenY && cursor.y < screenY + TILESZ) {
 						c.fillRect(screenX, screenY, TILESZ, TILESZ);
+						var text = vars["harvesters_" + tile.type.symbol].name;
+						if (!tile.done && tile.type.events.length > 0) {
+							text = "Visit " + tile.type.name;
+						}
+						c.fillStyle = "grey";
+						c.fillRect(screenX, screenY + TILESZ, c.measureText(text).width + 10, 30);
+						c.fillStyle = "black";
+						
+						c.fillText(text, screenX + 5, screenY + TILESZ + 20);
 						if (click) {
 							if (!tile.done && tile.type.events.length > 0) {
 								tileEvent(tile);

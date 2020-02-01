@@ -11,8 +11,8 @@ y y 2 hidden
 mvCooldown Move_Cooldown 3 hidden min 0
 r Interaction_Range 2 hidden
 vr Sight_Range 3 hidden
-harvesters_. Desert_Scavengers 0 hidden
-harvesters_f Forest_Harvesters 2 hidden
-harvesters_m Mountain_Miners 0 hidden
-harvesters_v Village_Traders 1 hidden
-harvesters_w Water_Carriers 2 hidden
+harvesters_. Scavenge 0 hidden
+harvesters_f Harvest 2 hidden
+harvesters_m Mine 0 hidden
+harvesters_v Send_Traders 1 hidden
+harvesters_w Carry_Water 2 hidden
