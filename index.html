@@ -27,13 +27,40 @@ var tileTypes = {};
 var map = [];
 var vars = {};
 var varList = [];
+var named_events = {};
+var triggered_events = [];
+var event = null;
 var ready = false;
+
+function triggerEvents() {
+	for (var i = 0; i < triggered_events.length; i++) {
+		var e = triggered_events[i];
+		if (e.used) { continue; }
+		if (test(e.test)) {
+			invoke(e);
+			return;
+		}
+	}
+}
+
+function invoke(e) {
+	effects(e.effects);
+	if (e.once) {
+		e.used = true;
+	}
+	if (e.text) {
+		event = e;
+	}
+}
 
 function effects(fx) {
 	for (var i = 0; i < fx.length; i++) {
 		if (fx[i] == "lose") {
 			load();
 			return;
+		}
+		if (fx[i] == "event") {
+			invoke(named_events[fx[i + 1]]);
 		}
 		var op = fx[i + 1];
 		if (op == "+") {
@@ -125,7 +152,78 @@ function load() {
 		}
 		console.log(vars);
 		console.log(varList);
-		loadTileTypes();
+		loadEvents(false);
+	});
+}
+
+function loadEvents(triggered) {
+	ajax(triggered ? "triggered_events.txt" : "named_events.txt", function(data) {
+		if (triggered) {
+			triggered_events = [];
+		} else {
+			named_events = {};
+		}
+		var e = null;
+		var o = null;
+		var lines = data.split("\n");
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i];
+			l = l.replace("\t", "    ").replace("\t", "    ");
+			if (l.trim() == "") { continue; }
+			if (l.startsWith("    ")) {
+				l = l.substring(4);
+				if (l == "once") {
+					e.once = true;
+				}
+				if (l.startsWith("text ")) {
+					e.text = l.substring(5);
+				}
+				if (l.startsWith("effects ")) {
+					e.effects = l.substring(8).split(" ");
+				}
+				if (l.startsWith("option ")) {
+					o = {
+						text: l.substring(7),
+						test: [],
+						effects: []
+					};
+					e.options.push(o);
+				}
+				if (l.startsWith("    ")) {
+					l = l.substring(4);
+					if (l.startsWith("test ")) {
+						o.test = l.substring(5).split(" ");
+					}
+					if (l.startsWith("effects ")) {
+						o.effects = l.substring(8).split(" ");
+					}
+				}
+			} else {
+				if (triggered) {
+					e = {
+						test: l.split(" "),
+						once: false,
+						effects: [],
+						options: []
+					};
+					triggered_events.push(e);
+				} else {
+					e = {
+						name: l,
+						effects: [],
+						options: []
+					};
+					named_events[e.name] = e;
+				}
+			}
+		}
+		if (triggered) {
+			console.log(triggered_events);
+			loadTileTypes();
+		} else {
+			console.log(named_events);
+			loadEvents(true);
+		}
 	});
 }
 
@@ -137,6 +235,7 @@ function loadTileTypes() {
 		for (var i = 0; i < lines.length; i++) {
 			var l = lines[i];
 			l = l.replace("\t", "    ");
+			if (l.trim() == "") { continue; }
 			if (l.startsWith("    ")) {
 				l = l.substring(4).split(" ");
 				if (l[0] == "wall") {
@@ -196,7 +295,6 @@ function loadMap() {
 load();
 
 function turn() {
-	setV("mvCooldown", v("mvCooldown") - 1);
 	setV("%", Math.floor((Math.random() * 100) + 1));
 	for (var y = 0; y < map.length; y++) {
 		for (var x = 0; x < map[y].length; x++) {
@@ -210,13 +308,16 @@ function turn() {
 			}
 		}
 	}
+	invoke(named_events["upkeep"]);
+	triggerEvents();
 }
 
 function move(dx, dy) {
-	setV("mvCooldown", 3);
+	setV("mvCooldown", 4);
 	setV("x", v("x") + dx);
 	setV("y", v("y") + dy);
 	effects(map[v("y")][v("x")].type.graze);
+	turn();
 }
 
 function inRadius(x, y) {
@@ -243,39 +344,82 @@ function tick(ms) {
 	}
 	img("Animal", v("x") * TILESZ + xScroll, v("y") * TILESZ + yScroll);
 	
-	// Move UI
-	if (v("mvCooldown") == 0) {
-		c.strokeStyle = "black";
-		c.fillStyle = "rgba(255, 255, 255, 0.5)";
-		for (var dy = -1; dy < 2; dy++) {
-			if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
-			var x = (v("x") + 1) * TILESZ + xScroll;
-			var y = (v("y") + dy) * TILESZ + yScroll;
-			c.strokeRect(x, y, TILESZ, TILESZ);
-			if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
-				c.fillRect(x, y, TILESZ, TILESZ);
-				if (click) {
-					move(1, dy);
+	if (event) {
+		// Event UI
+		var y = 20;
+		c.font = "20px Arial";
+		c.fillStyle = "grey";
+		c.fillRect(420, y, 400, 30);
+		c.fillStyle = "black";
+		c.fillText(event.text, 440, y + 20);
+		y += 35;
+		lp: for (var i = 0; i < event.options.length; i++) {
+			var o = event.options[i];
+			if (test(o.test)) {
+				if (cursor.x > 460 && cursor.x < 460 + 380 && cursor.y > y && cursor.y < y + 30) {
+					c.fillStyle = "white";
+					if (click) {
+						event = null;
+						effects(o.effects);
+						break lp;
+					}
+				} else {
+					c.fillStyle = "grey";
 				}
+				c.fillRect(440, y, 380, 30);
+				c.fillStyle = "black";
+				var text = o.text;
+				if (o.effects.length > 0) {
+					text += " (" + o.effects.join(" ") + ")"
+				}
+				c.fillText(text, 460, y + 20);
+			} else {
+				c.fillStyle("darkgray");
+				c.fillRect(440, y, 380, 30);
+				c.fillStyle = "black";
+				var text = o.text;
+				if (o.test.length > 0) {
+					text += " (" + o.test.join(" ") + ")"
+				}
+				c.fillText(text, 460, y + 20);
 			}
+			y += 35;
 		}
 	} else {
-		c.fillStyle = "rgba(255, 255, 255, 0.5)";
-		for (var y = 0; y < map.length; y++) {
-			for (var x = 0; x < map[y].length; x++) {
-				var tile = map[y][x];
-				if (!inRadius(x, y) || (x == v("x") && y == v("y"))) {
-					tile.harvesters = 0;
-					continue;
-				}
-				if (tile.type.harvest.length == 0) { continue; }
-				var screenX = x * TILESZ + xScroll;
-				var screenY = y * TILESZ + yScroll;
-				if (cursor.x > screenX && cursor.x < screenX + TILESZ && cursor.y > screenY && cursor.y < screenY + TILESZ) {
-					c.fillRect(screenX, screenY, TILESZ, TILESZ);
+		// Move UI
+		if (v("mvCooldown") == 0) {
+			c.strokeStyle = "black";
+			c.fillStyle = "rgba(255, 255, 255, 0.5)";
+			for (var dy = -1; dy < 2; dy++) {
+				if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
+				var x = (v("x") + 1) * TILESZ + xScroll;
+				var y = (v("y") + dy) * TILESZ + yScroll;
+				c.strokeRect(x, y, TILESZ, TILESZ);
+				if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
+					c.fillRect(x, y, TILESZ, TILESZ);
 					if (click) {
-						tile.harvesters++;
-						turn();
+						move(1, dy);
+					}
+				}
+			}
+		} else {
+			c.fillStyle = "rgba(255, 255, 255, 0.5)";
+			for (var y = 0; y < map.length; y++) {
+				for (var x = 0; x < map[y].length; x++) {
+					var tile = map[y][x];
+					if (!inRadius(x, y) || (x == v("x") && y == v("y"))) {
+						tile.harvesters = 0;
+						continue;
+					}
+					if (tile.type.harvest.length == 0) { continue; }
+					var screenX = x * TILESZ + xScroll;
+					var screenY = y * TILESZ + yScroll;
+					if (cursor.x > screenX && cursor.x < screenX + TILESZ && cursor.y > screenY && cursor.y < screenY + TILESZ) {
+						c.fillRect(screenX, screenY, TILESZ, TILESZ);
+						if (click) {
+							tile.harvesters++;
+							turn();
+						}
 					}
 				}
 			}

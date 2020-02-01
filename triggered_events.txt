@@ -1,0 +1,14 @@
+hunger > 10 % > 50
+	text The animal is hungry!
+	option Feed it
+		test food >= 10
+		effects hunger - 5 food - 10
+	option Don't feed it
+
+hunger >= 20
+	text The animal is starving!
+	option Feed it
+		test food >= 10
+		effects hunger = 15 food - 10
+	option Don't feed it
+		effects lose

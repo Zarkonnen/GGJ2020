@@ -1,0 +1,2 @@
+upkeep
+	effects mvCooldown - 1 food - 1 water - 1 hunger + 1
