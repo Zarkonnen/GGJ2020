@@ -3,9 +3,15 @@ food Food 10 min 0
 water Water 10 min 0
 wood Wood 10 min 0
 meds Medicine 0 min 0
-$ Trade_Goods 0 min 0
+$ Trade_Goods 3 min 0
 x x 2 hidden
 y y 2 hidden
 % % 0 hidden
 mvCooldown Move_Cooldown 3 hidden min 0
-r Radius 2 hidden
+r Interaction_Range 2 hidden
+vr Sight_Range 3 hidden
+harvesters_. Desert_Scavengers 0 hidden
+harvesters_f Forest_Harvesters 2 hidden
+harvesters_m Mountain_Miners 0 hidden
+harvesters_v Village_Traders 1 hidden
+harvesters_w Water_Carriers 2 hidden

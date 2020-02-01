@@ -8,6 +8,7 @@ m Mountains
 v Village
 	wall
 	harvest $ + 1
+	events sellWood buyWater
 w Water
 	wall
 	harvest water + 1
