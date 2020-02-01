@@ -1,0 +1,3 @@
+Stables
+	test wood >= 50
+	effects wood - 50 r = 3

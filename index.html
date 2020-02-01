@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html style="margin: 0; padding: 0;">
     <head>
-        <title>Game</title>
+        <title>GGJ 2020</title>
         <script src="jquery-3.1.1.min.js"></script>
         <script src="howler.min.js"></script>
     </head>
@@ -29,10 +29,17 @@ var vars = {};
 var varList = [];
 var named_events = {};
 var triggered_events = [];
+var upgrades = [];
+var id_to_upgrade = {};
 var event = null;
 var ready = false;
 var won = false;
 var lost = false;
+
+function upgrade(u) {
+	u.built = true;
+	effects(u.effects);
+}
 
 function triggerEvents() {
 	for (var i = 0; i < triggered_events.length; i++) {
@@ -55,6 +62,28 @@ function invoke(e) {
 	}
 }
 
+function format(fx) {
+	var l = [];
+	for (var i = 0; i < fx.length; i++) {
+		var f = fx[i];
+		if (f == "lose") {
+			f = "Lose";
+		}
+		if (f == "win") {
+			f = "Win";
+		}
+		if (f == "event" || f == "upgrade") {
+			i++;
+			continue;
+		}
+		if (vars[f]) {
+			f = vars[f].name;
+		}
+		l.push(f);
+	}
+	return l.join(" ");
+}
+
 function effects(fx) {
 	for (var i = 0; i < fx.length; i++) {
 		if (fx[i] == "lose") {
@@ -67,6 +96,11 @@ function effects(fx) {
 		}
 		if (fx[i] == "event") {
 			invoke(named_events[fx[i + 1]]);
+			continue;
+		}
+		if (fx[i] == "upgrade") {
+			upgrade(id_to_upgrade[fx[i + 1]]);
+			continue;
 		}
 		var op = fx[i + 1];
 		if (op == "+") {
@@ -273,6 +307,42 @@ function loadTileTypes() {
 			}
 		}
 		console.log(tileTypes);
+		loadUpgrades();
+	});
+}
+
+function loadUpgrades() {
+	ajax("upgrades.txt", function(data) {
+		upgrades = [];
+		var u = null;
+		var lines = data.split("\n");
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i];
+			l = l.replace("\t", "    ")
+			if (l.trim() == "") { continue; }
+			if (l.startsWith("    ")) {
+				l = l.substring(4);
+				if (l.startsWith("effects ")) {
+					u.effects = l.substring(8).split(" ");
+				}
+				if (l.startsWith("test ")) {
+					u.test = l.substring(5).split(" ");
+				}
+				if (l.startsWith("name ")) {
+					u.name = l.substring(5).split(" ");
+				}
+			} else {
+				u = {
+					name: l,
+					test: [],
+					effects: [],
+					built: false
+				};
+				id_to_upgrade[u.name] = u;
+				upgrades.push(u);
+			}
+		}
+		console.log(upgrades);
 		loadMap();
 	});
 }
@@ -399,7 +469,7 @@ function tick(ms) {
 				c.fillStyle = "black";
 				var text = o.text;
 				if (o.effects.length > 0) {
-					text += " (" + o.effects.join(" ") + ")"
+					text += " (" + format(o.effects) + ")";
 				}
 				c.fillText(text, 460, y + 20);
 			} else {
@@ -408,7 +478,7 @@ function tick(ms) {
 				c.fillStyle = "black";
 				var text = o.text;
 				if (o.test.length > 0) {
-					text += " (" + o.test.join(" ") + ")"
+					text += " (" + format(o.test) + ")";
 				}
 				c.fillText(text, 460, y + 20);
 			}
@@ -472,10 +542,41 @@ function tick(ms) {
 	var y = 30;
 	for (var i = 0; i < varList.length; i++) {
 		var vv = varList[i];
+		if (vv.hidden) { continue; }
 		c.fillText(vv.name + ": " + vv.value, 20, y);
 		y += 24;
 	}
-	
+	for (var i = 0; i < upgrades.length; i++) {
+		var u = upgrades[i];
+		if ((test(u.test) && v("mvCooldown") > 0) || u.built) {
+			if (u.built || (cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 30)) {
+				c.fillStyle = "white";
+				if (!u.built && click) {
+					upgrade(u);
+					turn();
+				}
+			} else {
+				c.fillStyle = "#777777";
+			}
+			c.fillRect(20, y, 360, 30);
+			c.fillStyle = "black";
+			var text = u.name;
+			if (u.effects.length > 0) {
+				text += " (" + format(u.effects) + ")";
+			}
+			c.fillText(text, 40, y + 20);
+		} else {
+			c.fillStyle = "#555555";
+			c.fillRect(20, y, 360, 30);
+			c.fillStyle = "black";
+			var text = u.name;
+			if (u.test.length > 0) {
+				text += " (" + format(u.test) + ")";
+			}
+			c.fillText(text, 40, y + 20);
+		}
+		y += 35;
+	}
 	click = null;
 }
 

@@ -7,5 +7,5 @@ $ Trade_Goods 0 min 0
 x x 2 hidden
 y y 2 hidden
 % % 0 hidden
-mvCooldown Move_Cooldown 3 hidden
-r Radius 3 hidden
+mvCooldown Move_Cooldown 3 hidden min 0
+r Radius 2 hidden
