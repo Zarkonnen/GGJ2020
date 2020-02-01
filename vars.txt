@@ -1,4 +1,4 @@
-hunger Hunger 0 min 0 hidden
+hunger Hunger 0 min 0 max 20 bar red
 food Food 10 min 0 icon Food
 water Water 10 min 0 icon WaterDrop
 wood Wood 10 min 0 icon Wood

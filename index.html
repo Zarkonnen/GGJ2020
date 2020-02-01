@@ -55,6 +55,7 @@ function tileEvent(t) {
 }
 
 function triggerEvents() {
+	if (event) { return; }
 	for (var i = 0; i < triggered_events.length; i++) {
 		var e = triggered_events[i];
 		if (e.used) { continue; }
@@ -95,6 +96,18 @@ function format(fx) {
 		l.push(f);
 	}
 	return l.join(" ");
+}
+
+function formatResourceUse(fx) {
+	var l = [];
+	for (var i = 0; i < fx.length; i++) {
+		if (fx[i] == "-" && vars[fx[i - 1]].icon) {
+			l.push(fx[i - 1]);
+			l.push(fx[i]);
+			l.push(fx[i + 1]);
+		}
+	}
+	return format(l);
 }
 
 function effects(fx) {
@@ -190,13 +203,18 @@ function load() {
 				id: l[0],
 				name: l[1].replace("_", " "),
 				value: parseInt(l[2]),
-				hidden: false
+				hidden: false,
+				bar: false
 			};
 			vars[v.id] = v;
 			varList.push(v);
 			for (var j = 3; j < l.length; j++) {
 				if (l[j] == "hidden") {
 					v.hidden = true;
+				}
+				if (l[j] == "bar") {
+					v.bar = l[j + 1];
+					j++;
 				}
 				if (l[j] == "min") {
 					v.min = parseInt(l[j + 1]);
@@ -476,17 +494,21 @@ function inSightRadius(x, y) {
 
 function getSteeringType(myDy) {
 	var highestAttraction = -100;
+	var highestAttractionY = -100;
 	for (var dy = -1; dy < 2; dy++) {
 		var t = map[v("y") + dy][v("x") + 1];
+		if (t.type.wall) { continue; }
 		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
-		if (attraction > highestAttraction || (attraction >= highestAttraction && myDy == dy)) {
-			highestAttraction = dy;
+		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
+			highestAttraction = attraction;
+			highestAttractionY = dy;
 		}
 	}
-	if (highestAttraction == myDy) {
+	if (highestAttractionY == myDy) {
 		return steeringTypes[0];
 	}
 	var t = map[v("y") + myDy][v("x") + 1];
+	if (t.type.wall) { return null; }
 	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
 	for (var i = 0; i < steeringTypes.length; i++) {
 		var st = steeringTypes[i];
@@ -616,8 +638,14 @@ function tick(ms) {
 				var y = (v("y") + dy) * TILESZ + yScroll;
 				c.strokeRect(x, y, TILESZ, TILESZ);
 				c.fillStyle = "black";
-				c.fillText(steeringType.name, x + 10, y + 25);
-				//c.fillText(format(steeringType.effects), x + 10, y + 50);
+				c.fillText(steeringType.name, x + 5, y + 25);
+				var res = formatResourceUse(steeringType.effects);
+				if (res) {
+					c.fillStyle = "grey";
+					c.fillRect(x, y + TILESZ - 30, c.measureText(res).width + 10, 30);
+					c.fillStyle = "black";
+					c.fillText(res, x + 5, y + TILESZ - 10);
+				}
 				if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
 					c.fillStyle = "rgba(255, 255, 255, 0.5)";
 					c.fillRect(x, y, TILESZ, TILESZ);
@@ -694,10 +722,21 @@ function tick(ms) {
 		var vv = varList[i];
 		if (vv.hidden) { continue; }
 		if (vv.icon) {
+			c.fillStyle = "black";
 			img(vv.icon, rx, 10);
 			c.fillText("" + vv.value, rx + 10, 77);
 			rx += 60;
+		} else if (vv.bar) {
+			c.fillText(vv.name, 20, y);
+			c.fillStyle = "black";
+			c.fillRect(180, y - 20, 204, 24);
+			c.fillStyle = "white";
+			c.fillRect(181, y - 20 + 1, 202, 22);
+			c.fillStyle = vv.bar;
+			c.fillRect(182, y - 20 + 2, 200 * vv.value / vv.max, 20);
+			y += 24;
 		} else {
+			c.fillStyle = "black";
 			c.fillText(vv.name + ": " + vv.value, 20, y);
 			y += 24;
 		}
