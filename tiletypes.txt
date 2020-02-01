@@ -2,7 +2,12 @@
 	graze hunger + 2
 f Forest
 	graze hunger - 1
+	harvest wood + 2 food + 1
 m Mountains
 	wall
 v Village
+	wall
+	harvest $ + 1
 w Water
+	wall
+	harvest water + 1

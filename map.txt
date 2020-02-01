@@ -1,5 +1,5 @@
 mmmmmmmmmmmmmmmmm
-....ff..........w
-...ff...........w
-.....f..........w
+.v..ff......f...w
+...ff...w.......w
+..w..f.....v....w
 mmmmmmmmmmmmmmmmm
