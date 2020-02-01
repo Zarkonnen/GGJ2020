@@ -1,8 +1,10 @@
 . Desert
 	graze hunger + 1
+	attraction 1
 f Forest
 	graze hunger - 1
 	harvest wood + 2 food + 1
+	attraction 3
 m Mountains
 	wall
 v Village

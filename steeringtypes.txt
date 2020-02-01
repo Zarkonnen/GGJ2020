@@ -1,0 +1,19 @@
+guide
+	name Guide
+	strength 0
+
+bribe
+	name Bribe
+	strength 3
+	test food >= 10
+	effects food - 10
+
+steer
+	name Steer
+	strength 6
+	test harness = 1
+
+whip
+	name Whip
+	strength 9
+	test whip = 1
