@@ -25,9 +25,38 @@ function ajax(file, callback) {
 
 var tileTypes = {};
 var map = [];
+var vars = {};
 var ready = false;
 
+function v(id) {
+	return vars[id].value;
+}
+
 function load() {
+	ajax("vars.txt", function(data) {
+		vars = {};
+		var lines = data.split("\n");
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i].split(" ");
+			var v = {
+				id: l[0],
+				name: l[1],
+				value: parseInt(l[2]),
+				hidden: false
+			};
+			vars[v.id] = v;
+			for (var j = 3; j < l.length; j++) {
+				if (l[j] == "hidden") {
+					v.hidden = true;
+				}
+			}
+		}
+		console.log(vars);
+		loadTileTypes();
+	});
+}
+
+function loadTileTypes() {
 	ajax("tiletypes.txt", function(data) {
 		tileTypes = {};
 		var lines = data.split("\n");
@@ -82,6 +111,10 @@ function tick(ms) {
 			img(map[y][x].type.img, x * TILESZ, y * TILESZ);
 		}
 	}
+	img("Animal", v("x") * TILESZ, v("y") * TILESZ);
+	
+	// Var display
+	
 }
 
 var images = {};
