@@ -1,4 +1,4 @@
-hunger > 10 % > 50
+hunger > 10 % > 70
 	text The animal is hungry!
 	option Feed it
 		test food >= 10

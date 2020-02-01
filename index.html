@@ -31,6 +31,8 @@ var named_events = {};
 var triggered_events = [];
 var event = null;
 var ready = false;
+var won = false;
+var lost = false;
 
 function triggerEvents() {
 	for (var i = 0; i < triggered_events.length; i++) {
@@ -56,7 +58,11 @@ function invoke(e) {
 function effects(fx) {
 	for (var i = 0; i < fx.length; i++) {
 		if (fx[i] == "lose") {
-			load();
+			lost = true;
+			return;
+		}
+		if (fx[i] == "win") {
+			won = true;
 			return;
 		}
 		if (fx[i] == "event") {
@@ -122,6 +128,11 @@ function setV(id, value) {
 }
 
 function load() {
+	event = null;
+	ready = false;
+	won = false;
+	lost = false;
+
 	ajax("vars.txt", function(data) {
 		vars = {};
 		varList = [];
@@ -344,7 +355,25 @@ function tick(ms) {
 	}
 	img("Animal", v("x") * TILESZ + xScroll, v("y") * TILESZ + yScroll);
 	
-	if (event) {
+	if (won) {
+		c.font = "80px Arial";
+		c.fillStyle = "grey";
+		c.fillRect(420, 20, 400, 90);
+		c.fillStyle = "black";
+		c.fillText("VICTORY", 440, 90);
+		if (click) {
+			load();
+		}
+	} else if (lost) {
+		c.font = "80px Arial";
+		c.fillStyle = "grey";
+		c.fillRect(420, 20, 400, 90);
+		c.fillStyle = "black";
+		c.fillText("DEFEAT", 440, 90);
+		if (click) {
+			load();
+		}
+	} else if (event) {
 		// Event UI
 		var y = 20;
 		c.font = "20px Arial";
@@ -374,7 +403,7 @@ function tick(ms) {
 				}
 				c.fillText(text, 460, y + 20);
 			} else {
-				c.fillStyle("darkgray");
+				c.fillStyle = "#555555";
 				c.fillRect(440, y, 380, 30);
 				c.fillStyle = "black";
 				var text = o.text;
