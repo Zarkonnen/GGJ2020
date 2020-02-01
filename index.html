@@ -14,6 +14,7 @@ function hwl(name, volume) {
 }
 
 const TILESZ = 100;
+const HUNGER_ATTRACTION_DECREASE = 0.2;
 
 // Load data
 function ajax(file, callback) {
@@ -31,6 +32,7 @@ var named_events = {};
 var triggered_events = [];
 var upgrades = [];
 var id_to_upgrade = {};
+var steeringTypes = [];
 var event = null;
 var ready = false;
 var won = false;
@@ -204,6 +206,10 @@ function load() {
 					v.max = parseInt(l[j + 1]);
 					j++;
 				}
+				if (l[j] == "icon") {
+					v.icon = l[j + 1];
+					j++;
+				}
 			}
 		}
 		console.log(vars);
@@ -298,6 +304,9 @@ function loadTileTypes() {
 				if (l[0] == "wall") {
 					tt.wall = true;
 				}
+				if (l[0] == "attraction") {
+					tt.attraction = parseInt(l[1]);
+				}
 				if (l[0] == "graze") {
 					l.splice(0, 1);
 					tt.graze = l;
@@ -315,6 +324,7 @@ function loadTileTypes() {
 					symbol: l.split(" ")[0],
 					img: l.split(" ")[1],
 					name: l.split(" ")[1],
+					attraction: 0,
 					wall: false,
 					graze: [],
 					harvest: [],
@@ -346,7 +356,7 @@ function loadUpgrades() {
 					u.test = l.substring(5).split(" ");
 				}
 				if (l.startsWith("name ")) {
-					u.name = l.substring(5).split(" ");
+					u.name = l.substring(5);
 				}
 			} else {
 				u = {
@@ -360,6 +370,44 @@ function loadUpgrades() {
 			}
 		}
 		console.log(upgrades);
+		loadSteeringTypes();
+	});
+}
+
+function loadSteeringTypes() {
+	ajax("steeringtypes.txt", function(data) {
+		steeringTypes = [];
+		var t = null;
+		var lines = data.split("\n");
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i];
+			l = l.replace("\t", "    ")
+			if (l.trim() == "") { continue; }
+			if (l.startsWith("    ")) {
+				l = l.substring(4);
+				if (l.startsWith("effects ")) {
+					t.effects = l.substring(8).split(" ");
+				}
+				if (l.startsWith("test ")) {
+					t.test = l.substring(5).split(" ");
+				}
+				if (l.startsWith("name ")) {
+					t.name = l.substring(5);
+				}
+				if (l.startsWith("strength ")) {
+					t.strength = parseInt(l.substring(9));
+				}
+			} else {
+				t = {
+					name: l,
+					test: [],
+					effects: [],
+					strength: 0
+				};
+				steeringTypes.push(t);
+			}
+		}
+		console.log(steeringTypes);
 		loadMap();
 	});
 }
@@ -426,6 +474,34 @@ function inSightRadius(x, y) {
 	return (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < v("vr") * v("vr");
 }
 
+function getSteeringType(myDy) {
+	var highestAttraction = -100;
+	for (var dy = -1; dy < 2; dy++) {
+		var t = map[v("y") + dy][v("x") + 1];
+		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
+			highestAttraction = dy;
+		}
+	}
+	if (highestAttraction == dy) {
+		return steeringTypes[0];
+	}
+	var t = map[v("y") + myDy][v("x") + 1];
+	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+	for (var i = 0; i < steeringTypes.length; i++) {
+		var st = steeringTypes[i];
+		if (test(st.test) && attraction + st.strength >= 0) {
+			return st;
+		}
+	}
+	return null;
+}
+
+function getAttraction(dy) {
+	var t = map[v("y") + dy][v("x") + 1];
+	return t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+}
+
 function tick(ms) {
     c.resetTransform();
     c.fillStyle = "black";
@@ -439,11 +515,23 @@ function tick(ms) {
 				continue;
 			}
 			img(map[y][x].type.img, x * TILESZ + xScroll, y * TILESZ + yScroll);
-			for (var i = 0; i < map[y][x].harvesters; i++) {
-				img("Hammer", x * TILESZ + xScroll + 10 - 10 * map[y][x].harvesters + i * 20, y * TILESZ + yScroll);
-			}
 			if (!map[y][x].done && map[y][x].type.events.length > 0) {
 				img("Event", x * TILESZ + xScroll, y * TILESZ + yScroll);
+			} else {
+				// Yields
+				var t = map[y][x].type;
+				var hx = 0;
+				for (var i = 0; i < t.harvest.length; i++) {
+					if (t.harvest[i] == "+" && vars[t.harvest[i - 1]].icon) {
+						for (var j = 0; j < v(t.harvest[i + 1]); j++) {
+							img(vars[t.harvest[i - 1]].icon, x * TILESZ + xScroll + hx, y * TILESZ + yScroll);
+							hx += 25;
+						}
+					}
+				}
+			}
+			for (var i = 0; i < map[y][x].harvesters; i++) {
+				img("Hammer", x * TILESZ + xScroll + 10 - 10 * map[y][x].harvesters + i * 20, y * TILESZ + yScroll);
 			}
 			if (!inRadius(x, y)) {
 				c.fillRect(x * TILESZ + xScroll, y * TILESZ + yScroll, TILESZ, TILESZ);
@@ -519,15 +607,22 @@ function tick(ms) {
 			c.fillStyle = "black";
 			c.fillText("Pick a tile to move to.", 440, 40);
 			c.strokeStyle = "black";
-			c.fillStyle = "rgba(255, 255, 255, 0.5)";
+			
 			for (var dy = -1; dy < 2; dy++) {
 				if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
+				var steeringType = getSteeringType(dy);
+				if (!steeringType) { continue; }
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
 				c.strokeRect(x, y, TILESZ, TILESZ);
+				c.fillStyle = "black";
+				c.fillText(steeringType.name, x + 10, y + 25);
+				//c.fillText(format(steeringType.effects), x + 10, y + 50);
 				if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
+					c.fillStyle = "rgba(255, 255, 255, 0.5)";
 					c.fillRect(x, y, TILESZ, TILESZ);
 					if (click) {
+						effects(steeringType.effects);
 						move(1, dy);
 					}
 				}
@@ -584,13 +679,21 @@ function tick(ms) {
 	c.fillRect(0, 0, 400, canvas.height);
 	c.font = "20px Arial";
 	c.fillStyle = "black";
-	var y = 30;
+	var y = 120;
+	var rx = 20;
 	for (var i = 0; i < varList.length; i++) {
 		var vv = varList[i];
 		if (vv.hidden) { continue; }
-		c.fillText(vv.name + ": " + vv.value, 20, y);
-		y += 24;
+		if (vv.icon) {
+			img(vv.icon, rx, 10);
+			c.fillText("" + vv.value, rx + 10, 77);
+			rx += 60;
+		} else {
+			c.fillText(vv.name + ": " + vv.value, 20, y);
+			y += 24;
+		}
 	}
+	
 	for (var i = 0; i < upgrades.length; i++) {
 		var u = upgrades[i];
 		if ((test(u.test) && v("mvCooldown") > 0) || u.built) {

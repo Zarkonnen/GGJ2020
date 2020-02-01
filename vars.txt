@@ -1,9 +1,10 @@
-hunger Hunger 0 min 0
-food Food 10 min 0
-water Water 10 min 0
-wood Wood 10 min 0
-meds Medicine 0 min 0
-$ Trade_Goods 3 min 0
+hunger Hunger 0 min 0 hidden
+food Food 10 min 0 icon Food
+water Water 10 min 0 icon WaterDrop
+wood Wood 10 min 0 icon Wood
+stone Stone 0 min 0 icon Stone
+meds Medicine 0 min 0 icon Medicine
+$ Trade_Goods 3 min 0 icon TradingGoods
 x x 2 hidden
 y y 2 hidden
 % % 0 hidden
