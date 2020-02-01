@@ -13,9 +13,17 @@ function hwl(name, volume) {
     return new Howl({src: ["sounds/" + name + ".ogg", "sounds/" + name + ".mp3", "sounds/" + name + ".wav"], volume: volume || 1});
 }
 
+// Load data
+function ajax(file, callback) {
+	jQuery.ajax({
+		url: file + "?" + (new Date()).getTime(),
+		success: callback
+	});
+}
+
 function tick(ms) {
     c.resetTransform();
-    c.fillStyle = "red";
+    c.fillStyle = "black";
     c.fillRect(0, 0, canvas.width, canvas.height);
 }
 
