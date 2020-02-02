@@ -1,17 +1,17 @@
+steer
+	name Steer
+	strength 5
+	test harness = 1
+
 guide
 	name Guide
 	strength 0
 
 bribe
 	name Bribe
-	strength 2
+	strength 3
 	test food >= 5
 	effects food - 5
-
-steer
-	name Steer
-	strength 5
-	test harness = 1
 
 whip
 	name Whip

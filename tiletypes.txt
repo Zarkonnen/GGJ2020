@@ -15,7 +15,7 @@ v Village
 w Water
 	harvest water + waterCarrying
 	graze thirst + 10
-	attraction 5
+	attraction 4
 b Bandits
 	wall
 	harvest $ + scavenging

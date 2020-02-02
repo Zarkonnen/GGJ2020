@@ -130,7 +130,7 @@ function formatCost(fx) {
 		if (fx[i] == ">=" && vars[fx[i - 1]].icon) {
 			l.push(fx[i + 1].trim() + " " + fx[i - 1].trim());
 		}
-		if (fx[i] == "=" && fx[i + 1] == "1") {
+		if (fx[i] == "=" && fx[i + 1].trim() == "1") {
 			l.push(fx[i - 1].trim());
 		}
 	}

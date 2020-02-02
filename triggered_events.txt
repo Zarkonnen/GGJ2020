@@ -1,4 +1,4 @@
-x >= 30
+x >= 35
 	text You have reached the ocean!
 	instant
 	option OK

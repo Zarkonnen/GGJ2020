@@ -4,8 +4,8 @@ Scouts
 	desc Increase your sight radius by 1.
 
 Stables
-	test wood >= 30 stone >= 10 horses = 1
-	effects wood - 30 stone - 10 r = 3
+	test wood >= 50 stone >= 10 horses = 1
+	effects wood - 50 stone - 10 r = 3
 	desc Increase your interaction radius by 1.
 
 Lumber Mill
@@ -19,13 +19,13 @@ Hunters
 	desc Increase strength, and leather from hunters by 1.
 
 Mason
-	test wood >= 20
-	effects wood - 10 mining = 2
+	test wood >= 25
+	effects wood - 25 mining = 2
 	desc Increase stone from miners by 1.
 
 Water Pump
-	test wood >= 10 engineer = 1
-	effects wood - 10 waterCarrying = 5
+	test wood >= 20 engineer = 1
+	effects wood - 20 waterCarrying = 5
 	desc Increase water from carrying by 2.
 
 Stone Houses
@@ -44,8 +44,8 @@ Barracks
 	desc Train fighters to defend your people.
 
 Feeding Station
-	test wood >= 10 leather >= 10 doctor = 1
-	effects wood - 10 leather - 10 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
+	test wood >= 20 leather >= 10 doctor = 1
+	effects wood - 20 leather - 10 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
 	desc Automatically give the animal food and water each turn.
 
 Harness

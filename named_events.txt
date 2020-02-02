@@ -105,7 +105,7 @@ buyFurs
 
 bandits
 	text You enter a bandit camp.
-	option Raid thoroughly
+	option Raid
 		test strength >= 10
 		effects strength - 1 $ + 10
 	option Retreat
