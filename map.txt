@@ -1,5 +1,11 @@
-mmmmmmmmmmmmmmCmm
--v--ffH...R.F...w
----ff--.w.......w
----fffF.....RR..w
-mmmmCmmmmmmCmmmmm
+mmmCmmmmmmmmmmmmmmmmmmmmmmmmmmmm
+sssssssssssssssssswwssssssssssss
+sssssssfffsfFfvsRssssHbssssssssw
+ssssw-ffwCfffb.ssssCmHsssww..b.w
+--F--Rffmmmf...--mmmH....C.....w
+----mmmmCww..R--------.b.......w
+mw---Hmm....ff---vww......R....w
+mmff--......mmff--...b.........w
+mm.v..-...vmmfff--wwwfff.......w
+...ww..vw..mmmmfwwwwFFwmvm...C.w
+mmmmmmmmmmCmmmmmmmmmmmmmmmCmmmmm

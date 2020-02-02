@@ -15,6 +15,7 @@ function hwl(name, volume) {
 
 const TILESZ = 100;
 const HUNGER_ATTRACTION_DECREASE = 0.2;
+const THIRST_ATTRACTION_DECREASE = 0.2;
 
 // Load data
 function ajax(file, callback) {
@@ -504,7 +505,7 @@ function getSteeringType(myDy) {
 	for (var dy = -1; dy < 2; dy++) {
 		var t = map[v("y") + dy][v("x") + 1];
 		if (t.type.wall) { continue; }
-		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE) - Math.ceil(v("thirst") * THIRST_ATTRACTION_DECREASE);
 		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
 			highestAttraction = attraction;
 			highestAttractionY = dy;
@@ -515,7 +516,7 @@ function getSteeringType(myDy) {
 	}
 	var t = map[v("y") + myDy][v("x") + 1];
 	if (t.type.wall) { return null; }
-	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE) - Math.ceil(v("thirst") * THIRST_ATTRACTION_DECREASE);
 	for (var i = 0; i < steeringTypes.length; i++) {
 		var st = steeringTypes[i];
 		if (test(st.test) && attraction + st.strength >= 0) {
@@ -527,7 +528,7 @@ function getSteeringType(myDy) {
 
 function getAttraction(dy) {
 	var t = map[v("y") + dy][v("x") + 1];
-	return t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE);
+	return t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE) - Math.ceil(v("thirst") * THIRST_ATTRACTION_DECREASE);
 }
 
 function tick(ms) {
@@ -752,6 +753,7 @@ function tick(ms) {
 			fillText("" + vv.value, rx + 10, 77);
 			rx += 60;
 		} else if (vv.bar) {
+			c.fillStyle = "#130d0a";
 			fillText(vv.name, 20, y);
 			c.fillStyle = "#130d0a";
 			c.fillRect(180, y - 17, 204, 24);

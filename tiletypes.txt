@@ -3,7 +3,7 @@
 	attraction 1
 f Forest
 	graze hunger - 1
-	harvest wood + 2 food + 1
+	harvest wood + 2
 	attraction 1
 m Mountains
 	wall
@@ -19,7 +19,7 @@ b Bandits
 	wall
 F FruitTrees
 	graze hunger - 3
-	harvest wood + 1 food + 3
+	harvest wood + 1 food + 2
 	attraction 5
 - Grassland
 	graze hunger - 1
@@ -35,3 +35,6 @@ H MedicalHerbs
 C Cave
 	wall
 	harvest stone + 2
+s Snow
+	graze thirst - 1
+	harvest wood + 1
