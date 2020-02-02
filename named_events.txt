@@ -83,6 +83,7 @@ bandits
 		effects strength - 1 $ + 10
 	option Raid briefly
 		effects strength - 3 $ + 5
+	option Leave
 
 strongBandits
 	text You enter a large bandit camp.
@@ -91,3 +92,83 @@ strongBandits
 		effects strength - 1 $ + 20
 	option Raid briefly
 		effects strength - 5 $ + 5
+	option Leave
+
+slavers
+	text These bandits have slaves.
+	option Free them
+		test strength >= 10
+		effects strength + 5 hope + 2
+	option Buy them
+		test $ >= 5
+		effects strength + 5 $ - 5 hope - 2
+	option Leave
+
+bears
+	text Great furry beasts inhabit these caves.
+	option Kill them for their warm furs
+		test strength >= 10
+		effects strength - 2
+	option Admire them
+		effects hope + 1
+	option Leave, quietly
+
+jewels
+	text You find a great wealth of jewels.
+	option OK
+		effect $ + 10
+
+empty
+	text The cave is dark and empty.
+	option OK
+		effect hope - 1
+
+lost
+	text Some of your people get lost in the cave and never return.
+	option OK
+		effect hope - 2 strength - 2
+
+monster
+	text There is a hideous monster in the cave!
+	option Defeat it
+		test strength >= 15
+		effect strength - 3 hope + 3
+	option Attempt to run
+		effect strength - 4 hope - 2
+
+plague
+	text The ruins contain a plague!
+	option Use medicine
+		test meds >= 5
+		effects meds - 5
+	option Send for the doctor
+		test meds >= 2 doctor = 1
+		effects meds - 2
+	option Suffer through it
+		effects strength - 3 hope - 3
+
+emptyRuins
+	text The ruins are empty. Everyone is dead.
+	option OK
+		effect hope - 2
+
+lootRuins
+	text You find loot in the ruins!
+	option OK
+		effect $ + 10 hope - 1
+
+stoneRuins
+	text There's a lot of reusable stones in these ruins.
+	option OK
+		effect stone + 20 hope - 1
+
+banditRuins
+	text A war band is leading away the survivors as slaves.
+	option Free them
+		test strength >= 10
+		effects strength + 5 hope + 2
+	option Buy them
+		test $ >= 5
+		effects strength + 5 $ - 5 hope - 3
+	option Leave
+		effects hope - 2

@@ -10,7 +10,7 @@ m Mountains
 	harvest stone + 1
 v Village
 	wall
-	harvest $ + 1
+	harvest $ + 2
 	events buyLeather buyHorses buyStone buyMeds buyWater buyFood
 w Water
 	harvest water + 3
@@ -18,7 +18,7 @@ w Water
 	attraction 5
 b Bandits
 	wall
-	events bandits strongBandits
+	events bandits strongBandits slavers
 F FruitTrees
 	graze hunger + 3 thirst + 1
 	harvest wood + 1 food + 3
@@ -29,7 +29,8 @@ F FruitTrees
 	attraction 3
 R Ruins
 	wall
-	harvest stone + 1
+	harvest stone + 1 $ + 1
+	events plague emptyRuins lootRuins banditRuins stoneRuins
 H MedicalHerbs
 	graze hunger + 1 thirst + 1
 	harvest food + 1 meds + 1
@@ -37,8 +38,9 @@ H MedicalHerbs
 C Cave
 	wall
 	harvest stone + 2
+	events bears jewels empty lost monster
 s Snow
-	graze thirst + 1
+	graze thirst + 2
 	harvest wood + 1 water + 1
 	attraction 2
 L Cattle

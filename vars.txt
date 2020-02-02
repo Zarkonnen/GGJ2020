@@ -38,7 +38,7 @@ warLeader War_Leader 0 hidden
 priest Priest 0 hidden
 doctor Doctor 0 hidden
 hated Infamous 0 hidden
-stone_houses Stone Houses 0 hidden
+stone_houses Stone_Houses 0 hidden
 food_upkeep Food_Upkeep -1 hidden
 water_upkeep Water_Upkeep -1 hidden
 hunger_upkeep Hunger_Upkeep -1 hidden

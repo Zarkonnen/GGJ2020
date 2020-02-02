@@ -31,7 +31,7 @@ Water Pump
 Stone Houses
 	test stone >= 50
 	effects stone - 50 hope + 5 stone_houses = 1
-	desc Keep your people happy and protected.
+	desc Keep your people happy and protected from the cold.
 
 Temple
 	test stone >= 20 priest = 1

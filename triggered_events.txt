@@ -54,7 +54,7 @@ x >= 32
 	option OK
 		effects win
 
-% > 95
+% > 95 turn > 10
 	text A plague breaks out!
 	option Use medicine
 		test meds >= 5
@@ -69,3 +69,8 @@ x >= 32
 	text The awful desert makes your people lose hope.
 	option OK
 		effects hope - 2
+
+% > 85 onTile Desert furs = 0 stone_houses = 0
+	text Your people are freezing cold.
+	option OK
+		effects strength - 2
