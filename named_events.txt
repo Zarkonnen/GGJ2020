@@ -14,3 +14,7 @@ buyWater
 		test $ >= 3
 		effects water + 10 $ - 3
 	option Don't
+
+agree
+	text Yep.
+	option Yep.

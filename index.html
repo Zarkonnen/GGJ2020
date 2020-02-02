@@ -5,8 +5,8 @@
         <script src="jquery-3.1.1.min.js"></script>
         <script src="howler.min.js"></script>
     </head>
-    <body style="margin: 0; padding: 0; background: black;">
-        <canvas width="1900" height="1000" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
+    <body style="margin: 0; padding: 0; background: #130d0a;">
+        <canvas width="1600" height="900" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
         <script>
 
 function hwl(name, volume) {
@@ -95,7 +95,7 @@ function format(fx) {
 		}
 		l.push(f);
 	}
-	return l.join(" ");
+	return l.join(" ").trim();
 }
 
 function formatResourceUse(fx) {
@@ -144,6 +144,11 @@ function effects(fx) {
 
 function test(ts) {
 	for (var i = 0; i < ts.length; i++) {
+		if (ts[i] == "onTile") {
+			if (map[v("y")][v("x")].type.name != ts[i + 1]) { return false; }
+			i += 1;
+			continue;
+		}
 		var op = ts[i + 1];
 		if (op == ">") {
 			if (v(ts[i]) <= v(ts[i + 2])) { return false; }
@@ -460,6 +465,7 @@ load();
 
 function turn() {
 	setV("%", Math.floor((Math.random() * 100) + 1));
+	setV("turn", v("turn") + 1);
 	for (var y = 0; y < map.length; y++) {
 		for (var x = 0; x < map[y].length; x++) {
 			var tile = map[y][x];
@@ -526,7 +532,7 @@ function getAttraction(dy) {
 
 function tick(ms) {
     c.resetTransform();
-    c.fillStyle = "black";
+    c.fillStyle = "#130d0a";
     c.fillRect(0, 0, canvas.width, canvas.height);
 	c.fillStyle = "rgba(0, 0, 0, 0.5)";
 	var xScroll = canvas.width / 2 - v("x") * TILESZ;
@@ -564,19 +570,19 @@ function tick(ms) {
 	
 	if (won) {
 		c.font = "80px Arial";
-		c.fillStyle = "grey";
+		c.fillStyle = "#906b4e";
 		c.fillRect(420, 20, 400, 90);
-		c.fillStyle = "black";
-		c.fillText("VICTORY", 440, 90);
+		c.fillStyle = "#130d0a";
+		fillText("VICTORY", 440, 90);
 		if (click) {
 			load();
 		}
 	} else if (lost) {
 		c.font = "80px Arial";
-		c.fillStyle = "grey";
+		c.fillStyle = "#906b4e";
 		c.fillRect(420, 20, 400, 90);
-		c.fillStyle = "black";
-		c.fillText("DEFEAT", 440, 90);
+		c.fillStyle = "#130d0a";
+		fillText("DEFEAT", 440, 90);
 		if (click) {
 			load();
 		}
@@ -584,51 +590,56 @@ function tick(ms) {
 		// Event UI
 		var y = 20;
 		c.font = "20px Arial";
-		c.fillStyle = "grey";
-		c.fillRect(420, y, 400, 30);
-		c.fillStyle = "black";
-		c.fillText(event.text, 440, y + 20);
+		c.fillStyle = "#906b4e";
+		c.fillRect(420, y, c.measureText(event.text).width + 20, 30);
+		c.fillStyle = "#130d0a";
+		fillText(event.text, 430, y + 20);
 		y += 35;
 		lp: for (var i = 0; i < event.options.length; i++) {
 			var o = event.options[i];
+			var text = o.text;
 			if (test(o.test)) {
-				if (cursor.x > 460 && cursor.x < 460 + 380 && cursor.y > y && cursor.y < y + 30) {
-					c.fillStyle = "white";
+				if (format(o.effects).length > 0) {
+					text += " (" + format(o.effects) + ")";
+				}
+			} else {
+				if (format(o.test).length > 0) {
+					text += " (" + format(o.test) + ")";
+				}
+			}
+			var w = c.measureText(text).width + 20;
+			c.fillStyle = "#533b2b";
+			c.fillRect(440 - 2, y - 2, w + 4, 30 + 4);
+			if (test(o.test)) {
+				if (cursor.x > 440 && cursor.x < 440 + w && cursor.y > y && cursor.y < y + 30) {
+					c.fillStyle = "#c08f68";
 					if (click) {
 						event = null;
 						effects(o.effects);
 						break lp;
 					}
 				} else {
-					c.fillStyle = "grey";
+					c.fillStyle = "#906b4e";
 				}
-				c.fillRect(440, y, 380, 30);
-				c.fillStyle = "black";
-				var text = o.text;
-				if (o.effects.length > 0) {
-					text += " (" + format(o.effects) + ")";
-				}
-				c.fillText(text, 460, y + 20);
+				c.fillRect(440, y, w, 30);
+				c.fillStyle = "#130d0a";
+				fillText(text, 450, y + 20);
 			} else {
-				c.fillStyle = "#555555";
-				c.fillRect(440, y, 380, 30);
-				c.fillStyle = "black";
-				var text = o.text;
-				if (o.test.length > 0) {
-					text += " (" + format(o.test) + ")";
-				}
-				c.fillText(text, 460, y + 20);
+				c.fillStyle = "#5d3f2a";
+				c.fillRect(440, y, w, 30);
+				c.fillStyle = "#130d0a";
+				fillText(text, 450, y + 20);
 			}
 			y += 35;
 		}
 	} else {
 		if (v("mvCooldown") == 0) {
 			c.font = "20px Arial";
-			c.fillStyle = "grey";
+			c.fillStyle = "#906b4e";
 			c.fillRect(420, 20, 400, 30);
-			c.fillStyle = "black";
-			c.fillText("Pick a tile to move to.", 440, 40);
-			c.strokeStyle = "black";
+			c.fillStyle = "#130d0a";
+			fillText("Pick a tile to move to.", 435, 40);
+			c.strokeStyle = "#130d0a";
 			
 			for (var dy = -1; dy < 2; dy++) {
 				if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
@@ -636,17 +647,23 @@ function tick(ms) {
 				if (!steeringType) { continue; }
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
+				c.fillStyle = "rgba(255, 255, 100, 0.4)";
+				c.fillRect(x, y, TILESZ, TILESZ);
 				c.strokeRect(x, y, TILESZ, TILESZ);
-				c.fillStyle = "black";
-				c.fillText(steeringType.name, x + 5, y + 25);
+				c.fillStyle = "#130d0a";
+				img(steeringType.name, x + 25, y + 5);
 				var res = formatResourceUse(steeringType.effects);
 				if (res) {
-					c.fillStyle = "grey";
+					c.fillStyle = "#906b4e";
 					c.fillRect(x, y + TILESZ - 30, c.measureText(res).width + 10, 30);
-					c.fillStyle = "black";
-					c.fillText(res, x + 5, y + TILESZ - 10);
+					c.fillStyle = "#130d0a";
+					fillText(res, x + 5, y + TILESZ - 10);
 				}
 				if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
+					c.fillStyle = "#906b4e";
+					c.fillRect(x, y, c.measureText(steeringType.name).width + 10, 30);
+					c.fillStyle = "#130d0a";
+					fillText(steeringType.name, x + 5, y + 20);
 					c.fillStyle = "rgba(255, 255, 255, 0.5)";
 					c.fillRect(x, y, TILESZ, TILESZ);
 					if (click) {
@@ -657,24 +674,26 @@ function tick(ms) {
 			}
 		} else {
 			c.font = "20px Arial";
-			c.fillStyle = "grey";
+			c.fillStyle = "#906b4e";
 			c.fillRect(420, 20, 400, 30);
-			c.fillStyle = "black";
-			c.fillText("Pick a tile to send people to.", 440, 40);
-			c.fillStyle = "grey";
+			c.fillStyle = "#130d0a";
+			fillText("Pick a tile to send people to.", 435, 40);
+			c.fillStyle = "#906b4e";
 			c.fillRect(420, 55, 400, 30);
-			c.fillStyle = "black";
-			c.fillText(v("mvCooldown") + " turns until the animal moves.", 440, 75);
-			c.fillStyle = "grey";
+			c.fillStyle = "#130d0a";
+			fillText(v("mvCooldown") + " turns until the animal moves.", 435, 75);
+			c.fillStyle = "#533b2b";
+			c.fillRect(840 - 2, 20 - 2, 140 + 4, 30 + 4);
+			c.fillStyle = "#906b4e";
 			if (cursor.x > 840 && cursor.x < 980 && cursor.y > 20 && cursor.y < 50) {
-				c.fillStyle = "white";
+				c.fillStyle = "#c08f68";
 				if (click) {
 					turn();
 				}
 			}
 			c.fillRect(840, 20, 140, 30);
-			c.fillStyle = "black";
-			c.fillText("Skip Turn", 860, 40);
+			c.fillStyle = "#130d0a";
+			fillText("Skip Turn", 855, 40);
 			c.fillStyle = "rgba(255, 255, 255, 0.5)";
 			for (var y = 0; y < map.length; y++) {
 				for (var x = 0; x < map[y].length; x++) {
@@ -692,11 +711,11 @@ function tick(ms) {
 						if (!tile.done && tile.type.events.length > 0) {
 							text = "Visit " + tile.type.name;
 						}
-						c.fillStyle = "grey";
+						c.fillStyle = "#906b4e";
 						c.fillRect(screenX, screenY + TILESZ, c.measureText(text).width + 10, 30);
-						c.fillStyle = "black";
+						c.fillStyle = "#130d0a";
 						
-						c.fillText(text, screenX + 5, screenY + TILESZ + 20);
+						fillText(text, screenX + 5, screenY + TILESZ + 20);
 						if (click) {
 							if (!tile.done && tile.type.events.length > 0) {
 								tileEvent(tile);
@@ -712,64 +731,72 @@ function tick(ms) {
 	}
 	
 	// Var display
-	c.fillStyle = "grey";
+	c.fillStyle = "#906b4e";
 	c.fillRect(0, 0, 400, canvas.height);
 	c.font = "20px Arial";
-	c.fillStyle = "black";
+	c.fillStyle = "#130d0a";
 	var y = 120;
 	var rx = 20;
 	for (var i = 0; i < varList.length; i++) {
 		var vv = varList[i];
 		if (vv.hidden) { continue; }
 		if (vv.icon) {
-			c.fillStyle = "black";
+			c.fillStyle = "#130d0a";
 			img(vv.icon, rx, 10);
-			c.fillText("" + vv.value, rx + 10, 77);
+			if (cursor.x > rx && cursor.x < rx + 50 && cursor.y > 10 && cursor.y < 60) {
+				c.fillStyle = "#906b4e";
+				c.fillRect(rx, 10, c.measureText(vv.name).width + 10, 30);
+				c.fillStyle = "#130d0a";
+				fillText(vv.name, rx, 30);
+			}
+			fillText("" + vv.value, rx + 10, 77);
 			rx += 60;
 		} else if (vv.bar) {
-			c.fillText(vv.name, 20, y);
-			c.fillStyle = "black";
-			c.fillRect(180, y - 20, 204, 24);
-			c.fillStyle = "white";
-			c.fillRect(181, y - 20 + 1, 202, 22);
+			fillText(vv.name, 20, y);
+			c.fillStyle = "#130d0a";
+			c.fillRect(180, y - 17, 204, 24);
+			c.fillStyle = "#c08f68";
+			c.fillRect(181, y - 17 + 1, 202, 22);
 			c.fillStyle = vv.bar;
-			c.fillRect(182, y - 20 + 2, 200 * vv.value / vv.max, 20);
+			c.fillRect(182, y - 17 + 2, 200 * vv.value / vv.max, 20);
 			y += 24;
 		} else {
-			c.fillStyle = "black";
-			c.fillText(vv.name + ": " + vv.value, 20, y);
+			c.fillStyle = "#130d0a";
+			fillText(vv.name + ": " + vv.value, 20, y);
 			y += 24;
 		}
 	}
 	
 	for (var i = 0; i < upgrades.length; i++) {
 		var u = upgrades[i];
+		c.fillStyle = "#533b2b";
+		c.fillRect(20 - 2, y - 2, 360 + 4, 30 + 4);
 		if ((test(u.test) && v("mvCooldown") > 0) || u.built) {
 			if (u.built || (cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 30)) {
-				c.fillStyle = "white";
+				c.fillStyle = "#c08f68";
 				if (!u.built && click) {
 					upgrade(u);
 					turn();
 				}
 			} else {
-				c.fillStyle = "#777777";
+				c.fillStyle = "#906b4e";
 			}
 			c.fillRect(20, y, 360, 30);
-			c.fillStyle = "black";
+			c.fillStyle = "#130d0a";
 			var text = u.name;
 			if (u.effects.length > 0) {
 				text += " (" + format(u.effects) + ")";
 			}
-			c.fillText(text, 40, y + 20);
+			fillText(text, 30, y + 20);
 		} else {
-			c.fillStyle = "#555555";
+			c.fillStyle = "#5d3f2a";
 			c.fillRect(20, y, 360, 30);
-			c.fillStyle = "black";
+			c.fillStyle = "#130d0a";
 			var text = u.name;
 			if (u.test.length > 0) {
 				text += " (" + format(u.test) + ")";
 			}
-			c.fillText(text, 40, y + 20);
+			fillText(text, 30, y + 20);
 		}
 		y += 35;
 	}
@@ -777,6 +804,10 @@ function tick(ms) {
 }
 
 var images = {};
+
+function fillText(text, x, y) {
+	c.fillText(text, x, y + 2);
+}
 
 function img(img, x, y) {
     if (img == null) { return; }
