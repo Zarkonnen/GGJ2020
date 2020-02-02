@@ -1,3 +1,18 @@
+x >= 30
+	text You have reached the ocean!
+	option OK
+		effects win
+
+strength = 0
+	text Your people have all died!
+	option OK
+		effects lose
+
+hope = 0
+	text Your people have lost hope!
+	option OK
+		effects lose
+
 thirst = 0
 	text The animal is dying of thirst!
 	option Give it water
@@ -6,13 +21,20 @@ thirst = 0
 	option Don't give it water
 		effects lose
 
-
 hunger = 0
 	text The animal is starving!
 	option Feed it
 		test food >= 10
 		effects hunger = 5 food - 10
 	option Don't feed it
+		effects lose
+
+hunger = 0
+	text The animal is dying!
+	option Heal it
+		test meds >= 10
+		effects health = 5 meds - 10
+	option Don't heal it
 		effects lose
 
 hunger < 10 % > 70
@@ -29,6 +51,13 @@ thirst < 10 % > 70
 		effects thirst + 5 water - 10
 	option Don't give it water
 
+health < 5 % > 70
+	text The animal is sick!
+	option Heal it
+		test meds >= 10
+		effects health + 5 meds - 10
+	option Don't heal it
+
 water = 0
 	text You have run out of water!
 	option Suffer
@@ -39,21 +68,6 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-strength = 0
-	text Your people have all died!
-	option OK
-		effects lose
-
-hope = 0
-	text Your people have lost hope!
-	option OK
-		effects lose
-
-x >= 32
-	text You have reached the ocean!
-	option OK
-		effects win
-
 % > 95 turn > 10
 	text A plague breaks out!
 	option Use medicine
@@ -62,15 +76,82 @@ x >= 32
 	option Send for the doctor
 		test meds >= 2 doctor = 1
 		effects meds - 2
+	option Send for the priest
+		effects strength - 3 hope - 1
 	option Suffer through it
 		effects strength - 3 hope - 3
+
+% > 90 turn > 20
+	text You are menaced by raiders!
+	option Defend yourselves
+		test strength >= 10
+		effects strength - 2 hope + 1
+	option Pay them off
+		test $ >= 10
+		effects $ - 10 hope - 1
+	option Endure
+		effects strength - 3 hope - 1
 
 % > 90 onTile Desert
 	text The awful desert makes your people lose hope.
 	option OK
 		effects hope - 2
 
-% > 85 onTile Desert furs = 0 stone_houses = 0
+% > 85 onTile Snow furs = 0 stone_houses = 0
 	text Your people are freezing cold.
 	option OK
 		effects strength - 2
+
+% > 95 turn > 10 hunger > 15
+	text The animal has a sore tooth!
+	option Treat it, carefully
+		test meds >= 10
+		effects meds - 10 hope + 1
+	option Have the engineer remove the tooth
+		test engineer = 1
+		effects hope + 1
+	option Send for the doctor
+		test doctor = 1 meds >= 5
+		effects meds - 5
+	option Tear out the tooth with brute force
+		test strength >= 10
+		effects health - 1
+	option Watch the animal suffer
+		effects hope - 1 health - 3
+
+% > 95 onTile Desert
+	text The animal is suffering from dry skin!
+	option Wash it
+		test water >= 20
+		effects water - 20
+	option Apply an ointment
+		test doctor = 1 meds >= 2
+		effects meds - 2
+	option Watch the animal suffer
+		option Watch the animal suffer
+		effects hope - 1 health - 2
+
+% > 95 onTile Snow
+	text The animal is cold!
+	option Wash its shell with warm water
+		test water >= 10 wood >= 5
+		effects water - 10 wood - 5
+	option Rub its skin
+		test strength >= 15
+	option Watch the animal suffer
+		option Watch the animal suffer
+		effects hope - 1 health - 2
+
+% > 95 turn > 10
+	text The animal is suffering from giant parasites!
+	option Hunt them down
+		test strength >= 10
+		effects hope + 1
+	option Have the doctor poison them
+		test doctor = 1 meds >= 5
+		effects meds - 5
+	option Smoke them out
+		test wood >= 10
+		effects wood - 10 health - 1
+	option Watch the animal suffer
+		effects hope - 1 health - 3

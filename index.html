@@ -6,7 +6,7 @@
         <script src="howler.min.js"></script>
     </head>
     <body style="margin: 0; padding: 0; background: #130d0a;">
-        <canvas width="1600" height="900" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
+        <canvas width="1400" height="940" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
         <script>
 
 function hwl(name, volume) {
@@ -189,6 +189,9 @@ function test(ts) {
 }
 
 function v(id) {
+	if (id == "%") {
+		return Math.floor((Math.random() * 100) + 1);
+	}
 	var numVal = parseInt(id);
 	if (isNaN(numVal)) {
 		return vars[id].value;
@@ -776,7 +779,20 @@ function tick(ms) {
 	c.fillRect(0, 0, 400, canvas.height);
 	c.font = "20px Arial";
 	c.fillStyle = "#130d0a";
-	var y = 120;
+	var y = 20;
+	for (var i = 0; i < varList.length; i++) {
+		var vv = varList[i];
+		if (!vv.hidden && !vv.icon && !vv.bar && vv.value) {
+			var w = c.measureText(vv.name).width + 20;
+			c.fillStyle = "#906b4e";
+			c.fillRect(canvas.width - w - 10, y, w, 30);
+			c.fillStyle = "#130d0a";
+			fillText(vv.name, canvas.width - w - 5, y + 20);
+			y += 35;
+		}
+	}
+	
+	y = 120;
 	var rx = 20;
 	for (var i = 0; i < varList.length; i++) {
 		var vv = varList[i];
@@ -801,10 +817,6 @@ function tick(ms) {
 			c.fillRect(181, y - 17 + 1, 202, 22);
 			c.fillStyle = vv.bar;
 			c.fillRect(182, y - 17 + 2, 200 * vv.value / vv.max, 20);
-			y += 24;
-		} else {
-			c.fillStyle = "#130d0a";
-			fillText(vv.name + ": " + vv.value, 20, y);
 			y += 24;
 		}
 	}

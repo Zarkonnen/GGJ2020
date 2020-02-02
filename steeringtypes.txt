@@ -5,8 +5,8 @@ guide
 bribe
 	name Bribe
 	strength 3
-	test food >= 10
-	effects food - 10
+	test food >= 5
+	effects food - 5
 
 steer
 	name Steer
@@ -17,3 +17,4 @@ whip
 	name Whip
 	strength 9
 	test whip = 1
+	effects health - 1

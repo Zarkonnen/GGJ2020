@@ -116,25 +116,28 @@ bears
 jewels
 	text You find a great wealth of jewels.
 	option OK
-		effect $ + 10
+		effects $ + 10
 
 empty
 	text The cave is dark and empty.
 	option OK
-		effect hope - 1
+		effects hope - 1
 
 lost
 	text Some of your people get lost in the cave and never return.
 	option OK
-		effect hope - 2 strength - 2
+		effects hope - 2 strength - 2
 
 monster
 	text There is a hideous monster in the cave!
 	option Defeat it
 		test strength >= 15
-		effect strength - 3 hope + 3
+		effects strength - 3 hope + 3
+	option Speak to it
+		test priest
+		effects hope + 5
 	option Attempt to run
-		effect strength - 4 hope - 2
+		effects strength - 4 hope - 2
 
 plague
 	text The ruins contain a plague!
@@ -144,23 +147,25 @@ plague
 	option Send for the doctor
 		test meds >= 2 doctor = 1
 		effects meds - 2
+	option Send for the priest
+		effects strength - 3 hope - 1
 	option Suffer through it
 		effects strength - 3 hope - 3
 
 emptyRuins
 	text The ruins are empty. Everyone is dead.
 	option OK
-		effect hope - 2
+		effects hope - 2
 
 lootRuins
 	text You find loot in the ruins!
 	option OK
-		effect $ + 10 hope - 1
+		effects $ + 10 hope - 1
 
 stoneRuins
 	text There's a lot of reusable stones in these ruins.
 	option OK
-		effect stone + 20 hope - 1
+		effects stone + 20 hope - 1
 
 banditRuins
 	text A war band is leading away the survivors as slaves.

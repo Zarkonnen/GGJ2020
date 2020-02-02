@@ -13,7 +13,7 @@ v Village
 	harvest $ + 2
 	events buyLeather buyHorses buyStone buyMeds buyWater buyFood
 w Water
-	harvest water + 3
+	harvest water + 4
 	graze thirst + 10
 	attraction 5
 b Bandits
