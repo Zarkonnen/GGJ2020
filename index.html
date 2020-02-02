@@ -684,11 +684,11 @@ function tick(ms) {
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
 				if (!steeringType) {
-					img("Refuse", x + 25, y + 40);
+					img("Refuse", x + 25, y + 5);
 					c.fillStyle = "#906b4e";
-					c.fillRect(x, y, c.measureText("Refused").width + 10, 30);
+					c.fillRect(x, y + TILESZ - 30, c.measureText("Refused").width + 10, 30);
 					c.fillStyle = "#130d0a";
-					fillText("Refused", x + 5, y + 20);
+					fillText("Refused", x + 5, y + 20 + TILESZ - 30);
 					continue;
 				}
 				c.fillStyle = "rgba(255, 255, 100, 0.4)";
@@ -863,7 +863,11 @@ function img(img, x, y) {
         images[img] = new Image();
         images[img].src = "graphics/" + img + ".png" + "?" + (new Date()).getTime();
     }
-    c.drawImage(images[img], x, y);
+	try {
+		c.drawImage(images[img], x, y);
+	} catch (e) {
+		console.log("Can't draw " + img + ".");
+	}	
 }
 
 var canvas = document.getElementById("gameCanvas");
