@@ -572,7 +572,7 @@ function tick(ms) {
 					if (t.harvest[i] == "+" && vars[t.harvest[i - 1]].icon) {
 						for (var j = 0; j < v(t.harvest[i + 1]); j++) {
 							img(vars[t.harvest[i - 1]].icon, x * TILESZ + xScroll + hx, y * TILESZ + yScroll);
-							hx += 25;
+							hx += 20;
 						}
 					}
 				}
@@ -653,11 +653,26 @@ function tick(ms) {
 		}
 	} else {
 		if (v("mvCooldown") == 0) {
+			var yy = 20;
 			c.font = "20px Arial";
 			c.fillStyle = "#906b4e";
-			c.fillRect(420, 20, 400, 30);
+			c.fillRect(420, yy, 400, 30);
 			c.fillStyle = "#130d0a";
-			fillText("Pick a tile to move to.", 435, 40);
+			fillText("Pick a tile to move to.", 435, yy + 20);
+			if (v("food") < 5) {
+				yy += 35;
+				c.fillStyle = "#906b4e";
+				c.fillRect(420, yy, 400, 30);
+				c.fillStyle = "#130d0a";
+				fillText("You are running out of food!", 435, yy + 20);
+			}
+			if (v("water") < 5) {
+				yy += 35;
+				c.fillStyle = "#906b4e";
+				c.fillRect(420, yy, 400, 30);
+				c.fillStyle = "#130d0a";
+				fillText("You are running out of water!", 435, yy + 20);
+			}
 			c.strokeStyle = "#130d0a";
 			
 			for (var dy = -1; dy < 2; dy++) {
@@ -666,7 +681,11 @@ function tick(ms) {
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
 				if (!steeringType) {
-					img("Refuse", x + 25, y + 5);
+					img("Refuse", x + 25, y + 40);
+					c.fillStyle = "#906b4e";
+					c.fillRect(x, y, c.measureText("Refused").width + 10, 30);
+					c.fillStyle = "#130d0a";
+					fillText("Refused", x + 5, y + 20);
 					continue;
 				}
 				c.fillStyle = "rgba(255, 255, 100, 0.4)";

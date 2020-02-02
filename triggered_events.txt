@@ -1,32 +1,33 @@
-hunger > 10 % > 70
-	text The animal is hungry!
-	option Feed it
-		test food >= 10
-		effects hunger - 5 food - 10
-	option Don't feed it
-
-hunger >= 20
-	text The animal is starving!
-	option Feed it
-		test food >= 10
-		effects hunger = 15 food - 10
-	option Don't feed it
-		effects lose
-
-hunger > 10 % > 70
-	text The animal is thirsty!
-	option Give it water
-		test water >= 10
-		effects thirst - 5 water - 10
-	option Don't give it water
-
-hunger >= 20
+thirst = 0
 	text The animal is dying of thirst!
 	option Give it water
 		test water >= 10
-		effects thirst = 15 water - 10
+		effects thirst = 5 water - 10
 	option Don't give it water
 		effects lose
+
+
+hunger = 0
+	text The animal is starving!
+	option Feed it
+		test food >= 10
+		effects hunger = 5 food - 10
+	option Don't feed it
+		effects lose
+
+hunger < 10 % > 70
+	text The animal is hungry!
+	option Feed it
+		test food >= 10
+		effects hunger + 5 food - 10
+	option Don't feed it
+
+thirst < 10 % > 70
+	text The animal is thirsty!
+	option Give it water
+		test water >= 10
+		effects thirst + 5 water - 10
+	option Don't give it water
 
 water = 0
 	text You have run out of water!
@@ -52,14 +53,6 @@ x >= 32
 	text You have reached the ocean!
 	option OK
 		effects win
-
-water < 5
-	text You have nearly run out of water!
-	option OK
-
-food < 5
-	text You have nearly run out of food!
-	option OK
 
 % > 95
 	text A plague breaks out!

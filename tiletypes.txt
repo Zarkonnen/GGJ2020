@@ -1,8 +1,8 @@
 . Desert
-	graze thirst + 1
+	graze thirst - 1
 	attraction 1
 f Forest
-	graze hunger - 1 thirst - 1
+	graze hunger + 1 thirst + 1
 	harvest wood + 2
 	attraction 4
 m Mountains
@@ -13,35 +13,35 @@ v Village
 	harvest $ + 1
 	events buyLeather buyHorses buyStone buyMeds buyWater buyFood
 w Water
-	harvest water + 2
-	graze thirst - 5
+	harvest water + 3
+	graze thirst + 10
 	attraction 5
 b Bandits
 	wall
 	events bandits strongBandits
 F FruitTrees
-	graze hunger - 3 thirst - 1
-	harvest wood + 1 food + 2
+	graze hunger + 3 thirst + 1
+	harvest wood + 1 food + 3
 	attraction 7
 - Grassland
-	graze hunger - 1 thirst - 1
-	harvest food + 1
+	graze hunger + 1 thirst + 1
+	harvest food + 2
 	attraction 3
 R Ruins
 	wall
 	harvest stone + 1
 H MedicalHerbs
-	graze hunger - 1 thirst - 1
-	harvest meds + 1
+	graze hunger + 1 thirst + 1
+	harvest food + 1 meds + 1
 	attraction 4
 C Cave
 	wall
 	harvest stone + 2
 s Snow
-	graze thirst - 1
-	harvest wood + 1
+	graze thirst + 1
+	harvest wood + 1 water + 1
 	attraction 2
 L Cattle
-	graze thirst - 1
+	graze thirst + 1
 	harvest leather + 2
 	attraction 3
