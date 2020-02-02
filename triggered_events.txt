@@ -13,8 +13,32 @@ hunger >= 20
 	option Don't feed it
 		effects lose
 
-onTile Forest
-	text You are in a desert!
-	option Yes
-		effects event agree
-	option No
+hunger > 10 % > 70
+	text The animal is thirsty!
+	option Give it water
+		test water >= 10
+		effects thirst - 5 water - 10
+	option Don't give it water
+
+hunger >= 20
+	text The animal is dying of thirst!
+	option Give it water
+		test water >= 10
+		effects thirst = 15 water - 10
+	option Don't give it water
+		effects lose
+
+water = 0
+	text You have run out of water!
+	option OK
+		effects lose
+
+food = 0
+	text You have run out of food!
+	option OK
+		effects lose
+
+x >= 32
+	text You have reached the ocean!
+	option OK
+		effects win

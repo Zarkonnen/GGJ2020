@@ -1,20 +1,77 @@
 upkeep
-	effects mvCooldown - 1 food - 1 water - 1 hunger + 1
+	effects mvCooldown - 1 food + food_upkeep water + water_upkeep hunger + hunger_upkeep thirst + thirst_upkeep
 
-sellWood
-	text The villagers ask to buy wood.
+buyLeather
+	text You enter a trading village.
 	option Sell wood
 		test wood >= 20
 		effects wood - 20 $ + 5
+	option Buy leather
+		test $ >= 5
+		effects leather + 15 $ - 5
+	option Recruit War Leader
+		test $ >= 8 warLeader = 0
+		effects $ - 8 warLeader = 1
+	option Don't
+
+buyHorses
+	text You enter a trading village.
+	option Buy horses
+		test $ >= 5
+		effects horses = 1 $ - 5
+	option Recruit War Leader
+		test $ >= 8 warLeader = 0
+		effects $ - 8 warLeader = 1
+	option Don't
+
+buyMeds
+	text You enter a trading village.
+	option Buy horses
+		test $ >= 5
+		effects horses = 1 $ - 5
+	option Buy medicine
+		test $ >= 5
+		effects meds + 15 $ - 5
 	option Don't
 
 buyWater
-	text The villagers offer to sell water.
+	text You enter a trading village.
+	option Sell food
+		test food >= 20
+		effects food - 20 $ + 5
 	option Buy water
-		test $ >= 3
-		effects water + 10 $ - 3
+		test $ >= 5
+		effects water + 15 $ - 5
+	option Recruit Engineer
+		test $ >= 8 engineer = 0
+		effects $ - 8 engineer = 1
 	option Don't
 
-agree
-	text Yep.
-	option Yep.
+buyStone
+	text You enter a trading village.
+	option Sell water
+		test water >= 20
+		effects water - 20 $ + 5
+	option Buy stone
+		test $ >= 5
+		effects stone + 15 $ - 5
+	option Recruit Priest
+		test $ >= 8 priest = 0
+		effects $ - 8 priest = 1
+	option Don't
+
+buyFood
+	text You enter a trading village.
+	option Sell leather
+		test leather >= 20
+		effects leather - 20 $ + 5
+	option Buy food
+		test $ >= 5
+		effects food + 15 $ - 5
+	option Recruit Doctor
+		test $ >= 8 doctor = 0
+		effects $ - 8 doctor = 1
+	option Recruit Engineer
+		test $ >= 8 engineer = 0
+		effects $ - 8 engineer = 1
+	option Don't

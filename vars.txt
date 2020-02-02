@@ -7,6 +7,7 @@ water Water 10 min 0 icon WaterDrop
 wood Wood 10 min 0 icon Wood
 stone Stone 0 min 0 icon Stone
 meds Medicine 0 min 0 icon Medicine
+leather Leather 0 min 0 icon Leather
 $ Trade_Goods 3 min 0 icon TradingGoods
 x x 2 hidden
 y y 5 hidden
@@ -26,6 +27,19 @@ harvesters_- Collect 1 hidden
 harvesters_R Scavenge 2 hidden
 harvesters_H Collect 1 hidden
 harvesters_C Mine 1 hidden
-harvester_s Harvest 1 hidden
+harvesters_s Harvest 1 hidden
+harvesters_L Hunt 1 hidden
 whip Forcible_Steering 0 hidden
 harness Steering_Harness 0 hidden
+horses Horses 0 hidden
+furs Furs 0 hidden
+engineer Engineer 0 hidden
+warLeader War_Leader 0 hidden
+priest Priest 0 hidden
+doctor Doctor 0 hidden
+hated Infamous 0 hidden
+stone_houses Stone Houses 0 hidden
+food_upkeep Food_Upkeep -1 hidden
+water_upkeep Water_Upkeep -1 hidden
+hunger_upkeep Hunger_Upkeep 1 hidden
+thirst_upkeep Thirst_Upkeep 1 hidden
