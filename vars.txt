@@ -4,7 +4,7 @@ health Animal:_Health 20 min 0 max 20 bar #4d9071
 strength People:_Strength 5 min 0 max 20 bar #9d3c12
 hope People:_Hope 10 min 0 max 20 bar #607a48
 food Food 10 min 0 icon Food
-water Water 10 min 0 icon WaterDrop
+water Water 20 min 0 icon Waterdrop
 wood Wood 10 min 0 icon Wood
 stone Stone 0 min 0 icon Stone
 meds Medicine 0 min 0 icon Medicine

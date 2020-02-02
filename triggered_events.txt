@@ -13,23 +13,7 @@ hope = 0
 	option OK
 		effects lose
 
-thirst = 0
-	text The animal is dying of thirst!
-	option Give it water
-		test water >= 10
-		effects thirst = 5 water - 10
-	option Don't give it water
-		effects lose
-
-hunger = 0
-	text The animal is starving!
-	option Feed it
-		test food >= 10
-		effects hunger = 5 food - 10
-	option Don't feed it
-		effects lose
-
-hunger = 0
+health = 0
 	text The animal is dying!
 	option Heal it
 		test meds >= 10
@@ -39,6 +23,22 @@ hunger = 0
 		effects health = 5 meds - 5
 	option Don't heal it
 		effects lose
+
+thirst = 0
+	text The animal is dying of thirst!
+	option Give it water
+		test water >= 10
+		effects thirst = 5 water - 10
+	option Don't give it water
+		effects health - 5
+
+hunger = 0
+	text The animal is starving!
+	option Feed it
+		test food >= 10
+		effects hunger = 5 food - 10
+	option Don't feed it
+		effects health - 5
 
 hunger < 10 % > 70
 	text The animal is hungry!
