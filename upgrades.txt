@@ -35,7 +35,7 @@ Barracks
 	effects wood - 20 stone - 20 leather >= 20 strength + 8
 
 Feeding Station
-	test wood > 20 leather > 20 doctor = 1
+	test wood >= 20 leather >= 20 doctor = 1
 	effects wood - 20 leather - 20 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
 
 Harness

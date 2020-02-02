@@ -42,3 +42,11 @@ x >= 32
 	text You have reached the ocean!
 	option OK
 		effects win
+
+water < 5
+	text You have nearly run out of water!
+	option OK
+
+food < 5
+	text You have nearly run out of food!
+	option OK

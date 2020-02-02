@@ -8,7 +8,7 @@ wood Wood 10 min 0 icon Wood
 stone Stone 0 min 0 icon Stone
 meds Medicine 0 min 0 icon Medicine
 leather Leather 0 min 0 icon Leather
-$ Trade_Goods 3 min 0 icon TradingGoods
+$ Trade_Goods 5 min 0 icon TradingGoods
 x x 2 hidden
 y y 5 hidden
 % % 0 hidden

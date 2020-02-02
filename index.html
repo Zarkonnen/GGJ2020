@@ -77,7 +77,8 @@ function invoke(e) {
 	}
 }
 
-function format(fx) {
+function format(fx, delim) {
+	if (!delim) { delim = " "; }
 	var l = [];
 	for (var i = 0; i < fx.length; i++) {
 		var f = fx[i];
@@ -96,7 +97,7 @@ function format(fx) {
 		}
 		l.push(f);
 	}
-	return l.join(" ").trim();
+	return l.join(delim).trim();
 }
 
 function formatResourceUse(fx) {
@@ -109,6 +110,19 @@ function formatResourceUse(fx) {
 		}
 	}
 	return format(l);
+}
+
+function formatCost(fx) {
+	var l = [];
+	for (var i = 0; i < fx.length; i++) {
+		if (fx[i] == ">=" && vars[fx[i - 1]].icon) {
+			l.push(fx[i + 1].trim() + " " + fx[i - 1].trim());
+		}
+		if (fx[i] == "="){// && fx[i + 1] == "1") {
+			l.push(fx[i - 1].trim());
+		}
+	}
+	return format(l, ", ");
 }
 
 function effects(fx) {
@@ -783,23 +797,16 @@ function tick(ms) {
 			} else {
 				c.fillStyle = "#906b4e";
 			}
-			c.fillRect(20, y, 360, 30);
-			c.fillStyle = "#130d0a";
-			var text = u.name;
-			if (u.effects.length > 0) {
-				text += " (" + format(u.effects) + ")";
-			}
-			fillText(text, 30, y + 20);
 		} else {
 			c.fillStyle = "#5d3f2a";
-			c.fillRect(20, y, 360, 30);
-			c.fillStyle = "#130d0a";
-			var text = u.name;
-			if (u.test.length > 0) {
-				text += " (" + format(u.test) + ")";
-			}
-			fillText(text, 30, y + 20);
 		}
+		c.fillRect(20, y, 360, 30);
+		c.fillStyle = "#130d0a";
+		fillText(u.name, 30, y + 20);
+		var w = c.measureText(u.name).width;
+		c.font = "13px Arial";
+		fillText(formatCost(u.test), 32 + w, y + 20);
+		c.font = "20px Arial";
 		y += 35;
 	}
 	click = null;

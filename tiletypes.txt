@@ -11,7 +11,7 @@ m Mountains
 v Village
 	wall
 	harvest $ + 1
-	events buyLeather buyHorses buyWood buyMeds buyWater buyFood
+	events buyLeather buyHorses buyStone buyMeds buyWater buyFood
 w Water
 	harvest water + 2
 	graze thirst - 5
