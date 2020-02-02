@@ -34,6 +34,9 @@ hunger = 0
 	option Heal it
 		test meds >= 10
 		effects health = 5 meds - 10
+	option Send for the doctor
+		test meds >= 5 doctor = 1
+		effects health = 5 meds - 5
 	option Don't heal it
 		effects lose
 
@@ -56,6 +59,9 @@ health < 5 % > 70
 	option Heal it
 		test meds >= 10
 		effects health + 5 meds - 10
+	option Send for the doctor
+		test meds >= 5 doctor = 1
+		effects health + 5 meds - 5
 	option Don't heal it
 
 water = 0
@@ -90,7 +96,7 @@ food = 0
 		test $ >= 10
 		effects $ - 10 hope - 1
 	option Endure
-		effects strength - 3 hope - 1
+		effects strength - 3 hope - 1 health - 1
 
 % > 90 onTile Desert
 	text The awful desert makes your people lose hope.
@@ -155,3 +161,26 @@ food = 0
 		effects wood - 10 health - 1
 	option Watch the animal suffer
 		effects hope - 1 health - 3
+
+% > 85 turn > 5
+	once
+	text Who are you?
+	option Traders
+		effects harvesters_v = 3
+	option Fighters
+		effects strength + 3
+	option Pilgrims
+		effects hope + 3
+
+% > 85 turn > 10
+	once
+	text What is the animal?
+	option A useful resource
+		effects health - 1 strength + 3
+	option A loyal steed
+	option A beloved pet
+		test health >= 12 hunger >= 9 thirst >= 9
+		effects health + 1
+	option A god
+		test health >= 18 hunger >= 12 thirst >= 12
+		effects hope + 3
