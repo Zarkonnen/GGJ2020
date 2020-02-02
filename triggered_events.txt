@@ -83,6 +83,7 @@ food = 0
 		test meds >= 2 doctor = 1
 		effects meds - 2
 	option Send for the priest
+		test priest = 1
 		effects strength - 3 hope - 1
 	option Suffer through it
 		effects strength - 3 hope - 3

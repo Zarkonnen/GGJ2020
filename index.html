@@ -6,7 +6,7 @@
         <script src="howler.min.js"></script>
     </head>
     <body style="margin: 0; padding: 0; background: #130d0a;">
-        <canvas width="1400" height="940" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
+        <canvas width="1670" height="940" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
         <script>
 
 function hwl(name, volume) {
@@ -25,6 +25,7 @@ function ajax(file, callback) {
 	});
 }
 
+var splash = true;
 var tileTypes = {};
 var map = [];
 var vars = {};
@@ -215,6 +216,7 @@ function load() {
 	ready = false;
 	won = false;
 	lost = false;
+	splash = true;
 
 	ajax("vars.txt", function(data) {
 		vars = {};
@@ -554,6 +556,16 @@ function getAttraction(dy) {
 
 function tick(ms) {
     c.resetTransform();
+	
+	if (splash) {
+		c.drawImage(splashScreen, 0, 0, 1670, 940);
+		if (click) {
+			splash = false;
+			click = null;
+		}
+		return;
+	}
+	
     c.fillStyle = "#130d0a";
     c.fillRect(0, 0, canvas.width, canvas.height);
 	c.fillStyle = "rgba(0, 0, 0, 0.5)";
@@ -852,6 +864,9 @@ function tick(ms) {
 }
 
 var images = {};
+
+var splashScreen = new Image();
+splashScreen.src = "graphics/Titlescreen_GGJ2020.jpg";
 
 function fillText(text, x, y) {
 	c.fillText(text, x, y + 2);
