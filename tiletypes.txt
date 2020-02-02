@@ -3,41 +3,42 @@
 	attraction 1
 f Forest
 	graze hunger + 1 thirst + 1
-	harvest wood + 2
+	harvest wood + logging
 	attraction 4
 m Mountains
 	wall
-	harvest stone + 1
+	harvest stone + mining
 v Village
 	wall
-	harvest $ + 2
-	events buyLeather buyHorses buyStone buyMeds buyWater buyFood
+	harvest $ + trading
+	events buyLeather buyHorses buyStone buyMeds buyWater buyFood buyFurs
 w Water
-	harvest water + 4
+	harvest water + waterCarrying
 	graze thirst + 10
 	attraction 5
 b Bandits
 	wall
-	events bandits strongBandits slavers
+	harvest $ + scavenging
+	events bandits strongBandits slavers weakBandits
 F FruitTrees
-	graze hunger + 3 thirst + 1
-	harvest wood + 1 food + 3
+	graze hunger + 5 thirst + 1
+	harvest wood + logging food + 2
 	attraction 7
 - Grassland
-	graze hunger + 1 thirst + 1
+	graze hunger + 2 thirst + 1
 	harvest food + 2
 	attraction 3
 R Ruins
 	wall
-	harvest stone + 1 $ + 1
+	harvest stone + 1 $ + scavenging
 	events plague emptyRuins lootRuins banditRuins stoneRuins
 H MedicalHerbs
 	graze hunger + 1 thirst + 1
-	harvest food + 1 meds + 1
+	harvest food + 1 meds + 2
 	attraction 4
 C Cave
 	wall
-	harvest stone + 2
+	harvest stone + mining stone + 1
 	events bears jewels empty lost monster
 s Snow
 	graze thirst + 2
@@ -45,5 +46,5 @@ s Snow
 	attraction 2
 L Cattle
 	graze thirst + 1
-	harvest leather + 2
+	harvest leather + hunting
 	attraction 3

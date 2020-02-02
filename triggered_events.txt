@@ -1,20 +1,24 @@
 x >= 30
 	text You have reached the ocean!
+	instant
 	option OK
 		effects win
 
 strength = 0
 	text Your people have all died!
+	instant
 	option OK
 		effects lose
 
 hope = 0
 	text Your people have lost hope!
+	instant
 	option OK
 		effects lose
 
 health = 0
 	text The animal is dying!
+	instant
 	option Heal it
 		test meds >= 10
 		effects health = 5 meds - 10
@@ -74,7 +78,7 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-% > 95 turn > 10
+% > 96 turn > 10
 	text A plague breaks out!
 	option Use medicine
 		test meds >= 5
@@ -88,7 +92,7 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 90 turn > 20
+% > 93 turn > 20
 	text You are menaced by raiders!
 	option Defend yourselves
 		test strength >= 10
@@ -104,7 +108,7 @@ food = 0
 	option OK
 		effects hope - 2
 
-% > 85 onTile Snow furs = 0 stone_houses = 0
+% > 75 onTile Snow furs = 0 stone_houses = 0
 	text Your people are freezing cold.
 	option OK
 		effects strength - 2
@@ -122,11 +126,11 @@ food = 0
 		effects meds - 5
 	option Tear out the tooth with brute force
 		test strength >= 10
-		effects health - 1
+		effects health - 1 strength - 1
 	option Watch the animal suffer
 		effects hope - 1 health - 3
 
-% > 95 onTile Desert
+% > 96 onTile Desert
 	text The animal is suffering from dry skin!
 	option Wash it
 		test water >= 20
@@ -145,15 +149,16 @@ food = 0
 		effects water - 10 wood - 5
 	option Rub its skin
 		test strength >= 15
+		results strength - 1
 	option Watch the animal suffer
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 95 turn > 10
+% > 96 turn > 10
 	text The animal is suffering from giant parasites!
 	option Hunt them down
 		test strength >= 10
-		effects hope + 1
+		effects hope + 1 strength - 1
 	option Have the doctor poison them
 		test doctor = 1 meds >= 5
 		effects meds - 5
@@ -167,9 +172,11 @@ food = 0
 	once
 	text Who are you?
 	option Traders
-		effects harvesters_v = 3
+		effects trading = 3
+	option Scavengers
+		effects scavenging = 2
 	option Fighters
-		effects strength + 3
+		effects strength + 2
 	option Pilgrims
 		effects hope + 3
 
@@ -180,8 +187,8 @@ food = 0
 		effects health - 1 strength + 3
 	option A loyal steed
 	option A beloved pet
-		test health >= 12 hunger >= 9 thirst >= 9
-		effects health + 1
+		test health >= 12 whip = 0
+		effects health + 1 pet = 1
 	option A god
-		test health >= 18 hunger >= 12 thirst >= 12
-		effects hope + 3
+		test health >= 18 whip = 0 harness = 0
+		effects hope + 3 worship = 1

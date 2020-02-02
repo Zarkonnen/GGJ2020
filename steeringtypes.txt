@@ -4,13 +4,13 @@ guide
 
 bribe
 	name Bribe
-	strength 3
+	strength 2
 	test food >= 5
 	effects food - 5
 
 steer
 	name Steer
-	strength 6
+	strength 5
 	test harness = 1
 
 whip

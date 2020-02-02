@@ -1,6 +1,6 @@
 Scouts
-	test wood >= 20
-	effects wood - 20 vr = 4
+	test wood >= 15
+	effects wood - 10 vr = 4
 	desc Increase your sight radius by 1.
 
 Stables
@@ -9,28 +9,28 @@ Stables
 	desc Increase your interaction radius by 1.
 
 Lumber Mill
-	test wood >= 10 stone >= 10
-	effects wood - 10 stone - 10 harvesters_f = 3
-	desc Increase the number of forest workers by 2.
+	test wood >= 15 stone >= 5
+	effects wood - 15 stone - 5 logging = 3
+	desc Increase wood from forests by 1.
 
 Hunters
-	test leather >= 20
-	effects leather - 20 strength + 3 harvesters_L = 3
-	desc Increase the number of hunters by 2.
+	test leather >= 10
+	effects leather - 10 strength + 3 hunting = 3
+	desc Increase strength, and leather from hunters by 1.
 
 Mason
-	test wood >= 10 stone >= 20
-	effects wood - 10 stone - 20 harvesters_m = 3
-	desc Increase the number of miners by 2.
+	test wood >= 20
+	effects wood - 10 mining = 2
+	desc Increase stone from miners by 1.
 
 Water Pump
 	test wood >= 10 engineer = 1
-	effects wood - 10 harvesters_w = 3
-	desc Increase the number of water carriers by 2.
+	effects wood - 10 waterCarrying = 5
+	desc Increase water from carrying by 2.
 
 Stone Houses
-	test stone >= 50
-	effects stone - 50 hope + 5 stone_houses = 1
+	test stone >= 30
+	effects stone - 30 hope + 5 stone_houses = 1
 	desc Keep your people happy and protected from the cold.
 
 Temple
@@ -39,21 +39,21 @@ Temple
 	desc Worship the animal and make your people happy.
 
 Barracks
-	test stone >= 20 leather >= 20 warLeader = 1
-	effects stone - 20 leather - 20 strength + 8
+	test stone >= 10 leather >= 10 warLeader = 1
+	effects stone - 10 leather - 10 strength + 8
 	desc Train fighters to defend your people.
 
 Feeding Station
-	test wood >= 10 leather >= 20 doctor = 1
-	effects wood - 10 leather - 20 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
+	test wood >= 10 leather >= 10 doctor = 1
+	effects wood - 10 leather - 10 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
 	desc Automatically give the animal food and water each turn.
 
 Harness
-	test leather >= 40 engineer = 1
-	effects leather - 40 harness = 1
+	test leather >= 30 engineer = 1 worship = 0
+	effects leather - 30 harness = 1
 	desc You can steer the animal gently.
 
 Whip
-	test leather >= 20
+	test leather >= 20 worship = 0 pet = 0
 	effects leather - 20 whip = 1
 	desc You can steer the animal by force.

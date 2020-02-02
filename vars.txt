@@ -1,9 +1,9 @@
 hunger Animal:_Food 20 min 0 max 20 bar #c04a17
 thirst Animal:_Water 20 min 0 max 20 bar #5988b7
-health Animal:_Health 20 min 0 max 20 bar #4d9071
+health Animal:_Health 18 min 0 max 20 bar #4d9071
 strength People:_Strength 5 min 0 max 20 bar #9d3c12
 hope People:_Hope 10 min 0 max 20 bar #607a48
-food Food 10 min 0 icon Food
+food Food 20 min 0 icon Food
 water Water 20 min 0 icon Waterdrop
 wood Wood 10 min 0 icon Wood
 stone Stone 0 min 0 icon Stone
@@ -43,3 +43,11 @@ food_upkeep Food_Upkeep -1 hidden
 water_upkeep Water_Upkeep -1 hidden
 hunger_upkeep Hunger_Upkeep -1 hidden
 thirst_upkeep Thirst_Upkeep -1 hidden
+mining Stone_from_Mining 1 hidden
+waterCarrying Water_from_Carrying 3 hidden
+hunting Leather_from_Hunting 2 hidden
+logging Wood_from_Forests 2 hidden
+trading Trade_Goods_from_Trading 2 hidden
+scavenging Trade_Goods_from_Scavenging 1 hidden
+worship Animal_Worship 0
+pet Animal_Pet 0

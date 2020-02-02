@@ -12,27 +12,36 @@ buyLeather
 	option Recruit War Leader
 		test $ >= 8 warLeader = 0
 		effects $ - 8 warLeader = 1 strength + 3
-	option Don't
+	option Recruit Engineer
+		test $ >= 8 engineer = 0
+		effects $ - 8 engineer = 1
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 buyHorses
 	text You enter a trading village.
 	option Buy horses
-		test $ >= 5
+		test $ >= 5 horses = 0
 		effects horses = 1 $ - 5
 	option Recruit War Leader
 		test $ >= 8 warLeader = 0
 		effects $ - 8 warLeader = 1 strength + 3
-	option Don't
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 buyMeds
 	text You enter a trading village.
 	option Buy horses
-		test $ >= 5
+		test $ >= 5 horses = 0
 		effects horses = 1 $ - 5
 	option Buy medicine
 		test $ >= 5
 		effects meds + 15 $ - 5
-	option Don't
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 buyWater
 	text You enter a trading village.
@@ -45,7 +54,9 @@ buyWater
 	option Recruit Engineer
 		test $ >= 8 engineer = 0
 		effects $ - 8 engineer = 1
-	option Don't
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 buyStone
 	text You enter a trading village.
@@ -58,7 +69,9 @@ buyStone
 	option Recruit Priest
 		test $ >= 8 priest = 0
 		effects $ - 8 priest = 1
-	option Don't
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 buyFood
 	text You enter a trading village.
@@ -74,25 +87,42 @@ buyFood
 	option Recruit Engineer
 		test $ >= 8 engineer = 0
 		effects $ - 8 engineer = 1
-	option Don't
+	option Trade Valuables
+		effects $ + 2
+	option Leave
+
+buyFurs
+	text You enter a trading village.
+	option Sell stone
+		test stone >= 20
+		effects stone - 20 $ + 5
+	option Buy furs
+		test $ >= 5 furs = 0
+		effects furs = 1 $ - 5
+	option Trade Valuables
+		effects $ + 2
+	option Leave
 
 bandits
 	text You enter a bandit camp.
 	option Raid thoroughly
 		test strength >= 10
 		effects strength - 1 $ + 10
-	option Raid briefly
-		effects strength - 3 $ + 5
-	option Leave
+	option Retreat
 
 strongBandits
 	text You enter a large bandit camp.
-	option Raid thoroughly
+	option Raid
 		test strength >= 15
 		effects strength - 1 $ + 20
-	option Raid briefly
-		effects strength - 5 $ + 5
-	option Leave
+	option Retreat
+
+weakBandits
+	text You catch the bandits unawares.
+	option Raid
+		test strength >= 5
+		effects strength - 1 $ + 10
+	option Retreat
 
 slavers
 	text These bandits have slaves.
@@ -100,15 +130,15 @@ slavers
 		test strength >= 10
 		effects strength + 5 hope + 2
 	option Buy them
-		test $ >= 5
-		effects strength + 5 $ - 5 hope - 2
+		test $ >= 5 hope > 3
+		effects strength + 5 $ - 5 hope - 3
 	option Leave
 
 bears
 	text Great furry beasts inhabit these caves.
 	option Kill them for their warm furs
 		test strength >= 10
-		effects strength - 2
+		effects strength - 2 furs = 1
 	option Admire them
 		effects hope + 1
 	option Leave, quietly
@@ -134,7 +164,7 @@ monster
 		test strength >= 15
 		effects strength - 3 hope + 3
 	option Speak to it
-		test priest
+		test priest = 1
 		effects hope + 5
 	option Attempt to run
 		effects strength - 4 hope - 2
@@ -148,6 +178,7 @@ plague
 		test meds >= 2 doctor = 1
 		effects meds - 2
 	option Send for the priest
+		test priest = 1
 		effects strength - 3 hope - 1
 	option Suffer through it
 		effects strength - 3 hope - 3
@@ -173,7 +204,7 @@ banditRuins
 		test strength >= 10
 		effects strength + 5 hope + 2
 	option Buy them
-		test $ >= 5
-		effects strength + 5 $ - 5 hope - 3
+		test $ >= 5 hope > 4
+		effects strength + 5 $ - 5 hope - 4
 	option Leave
 		effects hope - 2
