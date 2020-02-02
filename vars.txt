@@ -8,6 +8,7 @@ $ Trade_Goods 3 min 0 icon TradingGoods
 x x 2 hidden
 y y 2 hidden
 % % 0 hidden
+turn turn 0 hidden
 mvCooldown Move_Cooldown 3 hidden min 0
 r Interaction_Range 2 hidden
 vr Sight_Range 3 hidden

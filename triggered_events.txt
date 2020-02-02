@@ -12,3 +12,9 @@ hunger >= 20
 		effects hunger = 15 food - 10
 	option Don't feed it
 		effects lose
+
+onTile Forest
+	text You are in a desert!
+	option Yes
+		effects event agree
+	option No

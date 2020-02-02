@@ -144,6 +144,11 @@ function effects(fx) {
 
 function test(ts) {
 	for (var i = 0; i < ts.length; i++) {
+		if (ts[i] == "onTile") {
+			if (map[v("y")][v("x")].type.name != ts[i + 1]) { return false; }
+			i += 1;
+			continue;
+		}
 		var op = ts[i + 1];
 		if (op == ">") {
 			if (v(ts[i]) <= v(ts[i + 2])) { return false; }
@@ -460,6 +465,7 @@ load();
 
 function turn() {
 	setV("%", Math.floor((Math.random() * 100) + 1));
+	setV("turn", v("turn") + 1);
 	for (var y = 0; y < map.length; y++) {
 		for (var x = 0; x < map[y].length; x++) {
 			var tile = map[y][x];
@@ -605,7 +611,7 @@ function tick(ms) {
 				c.fillRect(440, y, 380, 30);
 				c.fillStyle = "black";
 				var text = o.text;
-				if (o.effects.length > 0) {
+				if (format(o.effects).length > 0) {
 					text += " (" + format(o.effects) + ")";
 				}
 				c.fillText(text, 460, y + 20);
@@ -614,7 +620,7 @@ function tick(ms) {
 				c.fillRect(440, y, 380, 30);
 				c.fillStyle = "black";
 				var text = o.text;
-				if (o.test.length > 0) {
+				if (format(o.test).length > 0) {
 					text += " (" + format(o.test) + ")";
 				}
 				c.fillText(text, 460, y + 20);
@@ -636,9 +642,11 @@ function tick(ms) {
 				if (!steeringType) { continue; }
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
+				c.fillStyle = "rgba(255, 255, 100, 0.4)";
+				c.fillRect(x, y, TILESZ, TILESZ);
 				c.strokeRect(x, y, TILESZ, TILESZ);
 				c.fillStyle = "black";
-				c.fillText(steeringType.name, x + 5, y + 25);
+				img(steeringType.name, x + 25, y + 5);
 				var res = formatResourceUse(steeringType.effects);
 				if (res) {
 					c.fillStyle = "grey";
@@ -647,6 +655,10 @@ function tick(ms) {
 					c.fillText(res, x + 5, y + TILESZ - 10);
 				}
 				if (cursor.x > x && cursor.x < x + TILESZ && cursor.y > y && cursor.y < y + TILESZ) {
+					c.fillStyle = "grey";
+					c.fillRect(x, y, c.measureText(steeringType.name).width + 10, 30);
+					c.fillStyle = "black";
+					c.fillText(steeringType.name, x + 5, y + 20);
 					c.fillStyle = "rgba(255, 255, 255, 0.5)";
 					c.fillRect(x, y, TILESZ, TILESZ);
 					if (click) {
