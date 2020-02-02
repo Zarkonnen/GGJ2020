@@ -18,6 +18,7 @@ w Water
 	attraction 5
 b Bandits
 	wall
+	events bandits strongBandits
 F FruitTrees
 	graze hunger - 3 thirst - 1
 	harvest wood + 1 food + 2

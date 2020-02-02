@@ -396,11 +396,15 @@ function loadUpgrades() {
 				if (l.startsWith("name ")) {
 					u.name = l.substring(5);
 				}
+				if (l.startsWith("desc ")) {
+					u.desc = l.substring(5);
+				}
 			} else {
 				u = {
 					name: l,
 					test: [],
 					effects: [],
+					desc: "",
 					built: false
 				};
 				id_to_upgrade[u.name] = u;
@@ -659,9 +663,12 @@ function tick(ms) {
 			for (var dy = -1; dy < 2; dy++) {
 				if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
 				var steeringType = getSteeringType(dy);
-				if (!steeringType) { continue; }
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;
+				if (!steeringType) {
+					img("Refuse", x + 25, y + 5);
+					continue;
+				}
 				c.fillStyle = "rgba(255, 255, 100, 0.4)";
 				c.fillRect(x, y, TILESZ, TILESZ);
 				c.strokeRect(x, y, TILESZ, TILESZ);
@@ -786,9 +793,9 @@ function tick(ms) {
 	for (var i = 0; i < upgrades.length; i++) {
 		var u = upgrades[i];
 		c.fillStyle = "#533b2b";
-		c.fillRect(20 - 2, y - 2, 360 + 4, 30 + 4);
+		c.fillRect(20 - 2, y - 2, 360 + 4, 52 + 4);
 		if ((test(u.test) && v("mvCooldown") > 0) || u.built) {
-			if (u.built || (cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 30)) {
+			if (u.built || (cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 52)) {
 				c.fillStyle = "#c08f68";
 				if (!u.built && click) {
 					upgrade(u);
@@ -800,14 +807,15 @@ function tick(ms) {
 		} else {
 			c.fillStyle = "#5d3f2a";
 		}
-		c.fillRect(20, y, 360, 30);
+		c.fillRect(20, y, 360, 52);
 		c.fillStyle = "#130d0a";
 		fillText(u.name, 30, y + 20);
 		var w = c.measureText(u.name).width;
 		c.font = "13px Arial";
 		fillText(formatCost(u.test), 32 + w, y + 20);
+		fillText(u.desc, 30, y + 40);
 		c.font = "20px Arial";
-		y += 35;
+		y += 57;
 	}
 	click = null;
 }

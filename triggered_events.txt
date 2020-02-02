@@ -30,11 +30,21 @@ hunger >= 20
 
 water = 0
 	text You have run out of water!
-	option OK
-		effects lose
+	option Suffer
+		effects strength - 3 hope - 1
 
 food = 0
 	text You have run out of food!
+	option Suffer
+		effects strength - 3 hope - 1
+
+strength = 0
+	text Your people have all died!
+	option OK
+		effects lose
+
+hope = 0
+	text Your people have lost hope!
 	option OK
 		effects lose
 
@@ -50,3 +60,19 @@ water < 5
 food < 5
 	text You have nearly run out of food!
 	option OK
+
+% > 95
+	text A plague breaks out!
+	option Use medicine
+		test meds >= 5
+		effects meds - 5
+	option Send for the doctor
+		test meds >= 2 doctor = 1
+		effects meds - 2
+	option Suffer through it
+		effects strength - 3 hope - 3
+
+% > 90 onTile Desert
+	text The awful desert makes your people lose hope.
+	option OK
+		effects hope - 2

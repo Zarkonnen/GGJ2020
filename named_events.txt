@@ -11,7 +11,7 @@ buyLeather
 		effects leather + 15 $ - 5
 	option Recruit War Leader
 		test $ >= 8 warLeader = 0
-		effects $ - 8 warLeader = 1
+		effects $ - 8 warLeader = 1 strength + 3
 	option Don't
 
 buyHorses
@@ -21,7 +21,7 @@ buyHorses
 		effects horses = 1 $ - 5
 	option Recruit War Leader
 		test $ >= 8 warLeader = 0
-		effects $ - 8 warLeader = 1
+		effects $ - 8 warLeader = 1 strength + 3
 	option Don't
 
 buyMeds
@@ -75,3 +75,19 @@ buyFood
 		test $ >= 8 engineer = 0
 		effects $ - 8 engineer = 1
 	option Don't
+
+bandits
+	text You enter a bandit camp.
+	option Raid thoroughly
+		test strength >= 10
+		effects strength - 1 $ + 10
+	option Raid briefly
+		effects strength - 3 $ + 5
+
+strongBandits
+	text You enter a large bandit camp.
+	option Raid thoroughly
+		test strength >= 15
+		effects strength - 1 $ + 20
+	option Raid briefly
+		effects strength - 5 $ + 5
