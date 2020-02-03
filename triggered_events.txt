@@ -232,6 +232,6 @@ turn >= 30
 		effects hope + 3 health + 2 hunger + 5 feeding + 2
 	option Worship the animal
 		test worship = 1
-		effects hope + 5 hope + temple hope + priest
+		effects hope + 5 hope + priest
 	option Rest and reflect
 		effects hope + 1 strength + 1
