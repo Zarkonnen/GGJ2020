@@ -78,7 +78,7 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-% > 96 turn > 10
+% > 97 turn > 15
 	text A plague breaks out!
 	option Use medicine
 		test meds >= 5
@@ -92,7 +92,7 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 93 turn > 20
+% > 95 turn > 25
 	text You are menaced by raiders!
 	option Defend yourselves
 		test strength >= 10
@@ -113,7 +113,7 @@ food = 0
 	option OK
 		effects strength - 2
 
-% > 95 turn > 10 hunger > 15
+% > 95 feeding >= 4
 	text The animal has a sore tooth!
 	option Treat it, carefully
 		test meds >= 10
@@ -130,7 +130,7 @@ food = 0
 	option Watch the animal suffer
 		effects hope - 1 health - 3
 
-% > 96 onTile Desert
+% > 94 onTile Desert
 	text The animal is suffering from dry skin!
 	option Wash it
 		test water >= 20
@@ -142,7 +142,7 @@ food = 0
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 95 onTile Snow
+% > 94 onTile Snow
 	text The animal is cold!
 	option Wash its shell with warm water
 		test water >= 10 wood >= 5
@@ -192,3 +192,21 @@ food = 0
 	option A god
 		test health >= 18 whip = 0 harness = 0
 		effects hope + 3 worship = 1
+
+turn >= 30
+	once
+	text It's the new year!
+	option Have a feast
+		test food >= 10
+		effects food - 10 hope + 2 strength + 2
+	option Have a party
+		test $ >= 5
+		effects $ - 5 hope + 3
+	option Thank the animal with food
+		test food >= 10 whip = 0
+		effects hope + 3 health + 2 hunger + 5 feeding + 2
+	option Worship the animal
+		test worship = 1
+		effects hope + 5 hope + temple hope + priest
+	option Rest and reflect
+		effects hope + 1 strength + 1

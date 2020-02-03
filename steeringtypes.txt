@@ -11,7 +11,7 @@ bribe
 	name Bribe
 	strength 3
 	test food >= 5
-	effects food - 5
+	effects food - 5 feeding + 1 hunger + 2
 
 whip
 	name Whip

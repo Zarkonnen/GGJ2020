@@ -49,11 +49,16 @@ Feeding Station
 	desc Automatically give the animal food and water each turn.
 
 Harness
-	test leather >= 30 engineer = 1 worship = 0
-	effects leather - 30 harness = 1
+	test leather >= 25 engineer = 1 worship = 0
+	effects leather - 25 harness = 1
 	desc You can steer the animal gently.
 
 Whip
-	test leather >= 20 worship = 0 pet = 0
-	effects leather - 20 whip = 1
+	test leather >= 15 worship = 0 pet = 0
+	effects leather - 15 whip = 1
 	desc You can steer the animal by force.
+
+Waterproofing
+	test wood >= 20
+	effects watertight = 1
+	desc Allows the animal to enter lakes.

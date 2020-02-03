@@ -1,10 +1,13 @@
 mmmmmCmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmwww
 sssssssssbsssssssssssswvssssssssssswwww
 sssssvsssfFfCssfFsvsRssssHbsssssRsswwww
-ssssssw-ffwssssffb.ssssCmHssvwwLL-Rwwww
---F----RfmHmms...--mvmCmH....C..--.wwww
----vL-mmmmCmw....R--LLL---.b.....R.wwww
-ww----LHmmv...f.ff---vww.....RR....wwww
+sssssswwffwssssffb.ssssCmHssvwwLL-.wwww
+fff----RfmHmms...--mvmCmH....C..--.wwww
+ffFvLLmmmmCmw....R--LLL---.b.....R.wwww
+f------LLwwmmC......ff..Cv...bR....wwww
+fww--Lffww..v..R..FFfv.....R...C.f.wwww
+fw--v---vw......b.ww.....C......FF.wwww
+fff---LHmmv.b.f.ff-L-vww.....RR....wwww
 mmffffLL--......Cfmmff--...b...v...wwww
 mmmvww--...wv-..mfFfR-wwwfff.....w.wwww
 mmCwwww..vwww...--fffbwwwFFwmvm..C.wwww

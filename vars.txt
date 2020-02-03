@@ -2,7 +2,7 @@ hunger Animal:_Food 20 min 0 max 20 bar #c04a17
 thirst Animal:_Water 20 min 0 max 20 bar #5988b7
 health Animal:_Health 18 min 0 max 20 bar #4d9071
 strength People:_Strength 5 min 0 max 20 bar #9d3c12
-hope People:_Hope 10 min 0 max 20 bar #607a48
+hope People:_Hope 8 min 0 max 20 bar #607a48
 food Food 20 min 0 icon Food
 water Water 20 min 0 icon Waterdrop
 wood Wood 10 min 0 icon Wood
@@ -11,7 +11,7 @@ meds Medicine 0 min 0 icon Medicine
 leather Leather 0 min 0 icon Leather
 $ Trade_Goods 5 min 0 icon TradingGoods
 x x 2 hidden
-y y 5 hidden
+y y 6 hidden
 % % 0 hidden
 turn turn 0 hidden
 mvCooldown Move_Cooldown 3 hidden min 0
@@ -51,3 +51,5 @@ trading Trade_Goods_from_Trading 2 hidden
 scavenging Trade_Goods_from_Scavenging 1 hidden
 worship Animal_Worship 0
 pet Animal_Pet 0
+feeding Feeding_Treats 0 hidden
+watertight Watertight_Houses 0

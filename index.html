@@ -6,7 +6,7 @@
         <script src="howler.min.js"></script>
     </head>
     <body style="margin: 0; padding: 0; background: #130d0a;">
-        <canvas width="1670" height="940" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
+        <canvas width="1760" height="990" allowfullscreen="true" id="gameCanvas" style="margin-left: 0px; margin-top: 0px;"></canvas>
         <script>
 
 function hwl(name, volume) {
@@ -350,6 +350,13 @@ function loadEvents(triggered) {
 	});
 }
 
+function wall(tt) {
+	if (tt.wallIfNot) {
+		return !v(tt.wallIfNot);
+	}
+	return tt.wall;
+}
+
 function loadTileTypes() {
 	ajax("tiletypes.txt", function(data) {
 		tileTypes = {};
@@ -366,6 +373,9 @@ function loadTileTypes() {
 				}
 				if (l[0] == "attraction") {
 					tt.attraction = parseInt(l[1]);
+				}
+				if (l[0] == "wallIfNot") {
+					tt.wallIfNot = l[1];
 				}
 				if (l[0] == "graze") {
 					l.splice(0, 1);
@@ -544,7 +554,7 @@ function getSteeringType(myDy) {
 	var highestAttractionY = -100;
 	for (var dy = -1; dy < 2; dy++) {
 		var t = map[v("y") + dy][v("x") + 1];
-		if (t.type.wall) { continue; }
+		if (wall(t.type)) { continue; }
 		var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE) - Math.ceil(v("thirst") * THIRST_ATTRACTION_DECREASE);
 		if (attraction > highestAttraction || (attraction == highestAttraction && myDy == dy)) {
 			highestAttraction = attraction;
@@ -555,7 +565,7 @@ function getSteeringType(myDy) {
 		return steeringTypes[0];
 	}
 	var t = map[v("y") + myDy][v("x") + 1];
-	if (t.type.wall) { return null; }
+	if (wall(t.type)) { return null; }
 	var attraction = t.type.attraction - Math.ceil(v("hunger") * HUNGER_ATTRACTION_DECREASE) - Math.ceil(v("thirst") * THIRST_ATTRACTION_DECREASE);
 	for (var i = 0; i < steeringTypes.length; i++) {
 		var st = steeringTypes[i];
@@ -575,7 +585,7 @@ function tick(ms) {
     c.resetTransform();
 	
 	if (splash) {
-		c.drawImage(splashScreen, 0, 0, 1670, 940);
+		c.drawImage(splashScreen, 0, 0, 1760, 990);
 		if (click) {
 			splash = false;
 			click = null;
@@ -714,7 +724,7 @@ function tick(ms) {
 			c.strokeStyle = "#130d0a";
 			
 			for (var dy = -1; dy < 2; dy++) {
-				if (map[v("y") + dy][v("x") + 1].type.wall) { continue; }
+				if (wall(map[v("y") + dy][v("x") + 1].type)) { continue; }
 				var steeringType = getSteeringType(dy);
 				var x = (v("x") + 1) * TILESZ + xScroll;
 				var y = (v("y") + dy) * TILESZ + yScroll;

@@ -155,6 +155,9 @@ empty
 
 lost
 	text Some of your people get lost in the cave and never return.
+	option Pray for them
+		test priest = 1
+		effects strength - 2
 	option OK
 		effects hope - 2 strength - 2
 
@@ -185,18 +188,20 @@ plague
 
 emptyRuins
 	text The ruins are empty. Everyone is dead.
+	option Bury the dead with proper rites
+		test priest = 1
 	option OK
-		effects hope - 2
+		effects hope - 3
 
 lootRuins
 	text You find loot in the ruins!
 	option OK
-		effects $ + 10 hope - 1
+		effects $ + 10
 
 stoneRuins
 	text There's a lot of reusable stones in these ruins.
 	option OK
-		effects stone + 20 hope - 1
+		effects stone + 20 hope
 
 banditRuins
 	text A war band is leading away the survivors as slaves.

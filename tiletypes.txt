@@ -16,6 +16,7 @@ w Water
 	harvest water + waterCarrying
 	graze thirst + 10
 	attraction 4
+	wallIfNot watertight
 b Bandits
 	wall
 	harvest $ + scavenging
