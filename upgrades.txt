@@ -4,8 +4,8 @@ Scouts
 	desc Increase your sight radius by 1.
 
 Stables
-	test wood >= 50 stone >= 10 horses = 1
-	effects wood - 50 stone - 10 r = 3
+	test wood >= 40 stone >= 10 horses = 1
+	effects wood - 40 stone - 10 r = 3
 	desc Increase your interaction radius by 1.
 
 Lumber Mill
@@ -39,12 +39,12 @@ Temple
 	desc Worship the animal and make your people happy.
 
 Barracks
-	test stone >= 10 leather >= 10 warLeader = 1
-	effects stone - 10 leather - 10 strength + 8
+	test wood >= 30 leather >= 10 warLeader = 1
+	effects wood - 30 leather - 10 strength + 8
 	desc Train fighters to defend your people.
 
 Feeding Station
-	test wood >= 20 leather >= 10 doctor = 1
+	test wood >= 20 leather >= 10 engineer = 1
 	effects wood - 20 leather - 10 food_upkeep = -2 water_upkeep = -2 hunger_upkeep = 0 thirst_upkeep = 0
 	desc Automatically give the animal food and water each turn.
 

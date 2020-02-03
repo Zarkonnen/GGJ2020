@@ -1,11 +1,11 @@
+guide
+	name Guide
+	strength 0
+
 steer
 	name Steer
 	strength 5
 	test harness = 1
-
-guide
-	name Guide
-	strength 0
 
 bribe
 	name Bribe

@@ -69,10 +69,12 @@ function triggerEvents() {
 }
 
 function triggerInstants() {
+	console.log("TriggerInstants");
 	for (var i = 0; i < triggered_events.length; i++) {
 		var e = triggered_events[i];
 		if (e.used || !e.instant) { continue; }
 		if (test(e.test)) {
+			console.log(e.text);
 			invoke(e);
 			return;
 		}
@@ -292,7 +294,7 @@ function loadEvents(triggered) {
 					e.once = true;
 				}
 				if (l == "instant") {
-					e.once = true;
+					e.instant = true;
 				}
 				if (l.startsWith("text ")) {
 					e.text = l.substring(5);
