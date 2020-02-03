@@ -4,7 +4,7 @@
 f Forest
 	graze hunger + 1 thirst + 1
 	harvest wood + logging
-	attraction 4
+	attraction 3
 m Mountains
 	wall
 	harvest stone + mining
@@ -19,7 +19,6 @@ w Water
 	wallIfNot watertight
 b Bandits
 	wall
-	harvest $ + scavenging
 	events bandits strongBandits slavers weakBandits
 F FruitTrees
 	graze hunger + 5 thirst + 1
@@ -28,7 +27,7 @@ F FruitTrees
 - Grassland
 	graze hunger + 2 thirst + 2
 	harvest food + 2
-	attraction 3
+	attraction 4
 R Ruins
 	wall
 	harvest stone + 1 $ + scavenging
@@ -36,7 +35,7 @@ R Ruins
 H MedicalHerbs
 	graze hunger + 1 thirst + 1
 	harvest food + 1 meds + 2
-	attraction 4
+	attraction 5
 C Cave
 	wall
 	harvest stone + mining stone + 1
@@ -48,4 +47,4 @@ s Snow
 L Cattle
 	graze thirst + 1
 	harvest leather + hunting
-	attraction 3
+	attraction 4

@@ -109,7 +109,12 @@ function format(fx, delim) {
 		if (vars[f]) {
 			f = vars[f].name;
 		}
+		
 		l.push(f);
+		if (f == "+" || f == "-" || f == "=") {
+			l.push(v(fx[i + 1]));
+			i++;
+		}
 	}
 	return l.join(delim).trim();
 }
@@ -772,17 +777,19 @@ function tick(ms) {
 			c.fillStyle = "#130d0a";
 			fillText(v("mvCooldown") + " turns until the animal moves.", 435, 75);
 			c.fillStyle = "#533b2b";
-			c.fillRect(840 - 2, 20 - 2, 140 + 4, 30 + 4);
+			var sw = c.measureText("Skip Turn (" + format(named_events["skip"].effects) + ")").width + 20;
+			c.fillRect(840 - 2, 20 - 2, sw + 4, 30 + 4);
 			c.fillStyle = "#906b4e";
-			if (cursor.x > 840 && cursor.x < 980 && cursor.y > 20 && cursor.y < 50) {
+			if (cursor.x > 840 && cursor.x < 840 + sw && cursor.y > 20 && cursor.y < 50) {
 				c.fillStyle = "#c08f68";
 				if (click) {
+					effects(named_events["skip"].effects);
 					turn();
 				}
 			}
-			c.fillRect(840, 20, 140, 30);
+			c.fillRect(840, 20, sw, 30);
 			c.fillStyle = "#130d0a";
-			fillText("Skip Turn", 855, 40);
+			fillText("Skip Turn (" + format(named_events["skip"].effects) + ")", 850, 40);
 			c.fillStyle = "rgba(255, 255, 255, 0.5)";
 			for (var y = 0; y < map.length; y++) {
 				for (var x = 0; x < map[y].length; x++) {

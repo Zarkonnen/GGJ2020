@@ -78,7 +78,8 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-% > 97 turn > 15
+% > 95 turn > 15
+	once
 	text A plague breaks out!
 	option Use medicine
 		test meds >= 5
@@ -93,6 +94,7 @@ food = 0
 		effects strength - 3 hope - 3
 
 % > 95 turn > 25
+	once
 	text You are menaced by raiders!
 	option Defend yourselves
 		test strength >= 10
@@ -108,12 +110,13 @@ food = 0
 	option OK
 		effects hope - 2
 
-% > 75 onTile Snow furs = 0 stone_houses = 0
+% > 85 onTile Snow furs = 0 stone_houses = 0
 	text Your people are freezing cold.
 	option OK
 		effects strength - 2
 
-% > 95 feeding >= 4
+% > 95 feeding >= 3
+	once
 	text The animal has a sore tooth!
 	option Treat it, carefully
 		test meds >= 10
@@ -130,7 +133,7 @@ food = 0
 	option Watch the animal suffer
 		effects hope - 1 health - 3
 
-% > 94 onTile Desert
+% > 95 onTile Desert
 	text The animal is suffering from dry skin!
 	option Wash it
 		test water >= 20
@@ -142,7 +145,7 @@ food = 0
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 94 onTile Snow
+% > 95 onTile Snow
 	text The animal is cold!
 	option Wash its shell with warm water
 		test water >= 10 wood >= 5
@@ -154,7 +157,8 @@ food = 0
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 96 turn > 10
+% > 95 turn > 10
+	once
 	text The animal is suffering from giant parasites!
 	option Hunt them down
 		test strength >= 10
@@ -179,6 +183,8 @@ food = 0
 		effects strength + 2
 	option Pilgrims
 		effects hope + 3
+	option Artisans
+		effects skip_trade_goods = 2
 
 % > 85 turn > 10
 	once
@@ -202,6 +208,9 @@ turn >= 30
 	option Have a party
 		test $ >= 5
 		effects $ - 5 hope + 3
+	option Make a great bonfire
+		test wood >= 5
+		effects wood - 5 hope + 3 health - 1
 	option Thank the animal with food
 		test food >= 10 whip = 0
 		effects hope + 3 health + 2 hunger + 5 feeding + 2

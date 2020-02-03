@@ -53,3 +53,4 @@ worship Animal_Worship 0
 pet Animal_Pet 0
 feeding Feeding_Treats 0 hidden
 watertight Watertight_Houses 0
+skip_trade_goods Trade_Goods_from_Skipping_Turns 1 hidden

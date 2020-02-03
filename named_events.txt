@@ -1,6 +1,9 @@
 upkeep
 	effects mvCooldown - 1 food + food_upkeep water + water_upkeep hunger + hunger_upkeep thirst + thirst_upkeep
 
+skip
+	effects $ + skip_trade_goods
+
 buyLeather
 	text You enter a trading village.
 	option Sell wood
@@ -38,7 +41,7 @@ buyMeds
 		effects horses = 1 $ - 5
 	option Buy medicine
 		test $ >= 5
-		effects meds + 15 $ - 5
+		effects meds + 10 $ - 5
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -99,6 +102,9 @@ buyFurs
 	option Buy furs
 		test $ >= 5 furs = 0
 		effects furs = 1 $ - 5
+	option Buy medicine
+		test $ >= 5
+		effects meds + 10 $ - 5
 	option Trade Valuables
 		effects $ + 2
 	option Leave
