@@ -103,7 +103,7 @@ food = 0
 	option Endure
 		effects strength - 3 hope - 1 health - 1
 
-% > 90 onTile Desert
+% > 95 onTile Desert
 	text The awful desert makes your people lose hope.
 	option OK
 		effects hope - 2
