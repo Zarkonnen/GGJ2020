@@ -1,4 +1,4 @@
-x >= 35
+x >= 34
 	text You have reached the ocean!
 	instant
 	option OK
@@ -58,7 +58,8 @@ thirst < 10 % > 70
 		effects thirst + 5 water - 10
 	option Don't give it water
 
-health < 12 % > 95
+health < 10 % > 85
+	once
 	text The animal is sick!
 	option Heal it
 		test meds >= 10
@@ -79,7 +80,7 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-% > 95 turn > 15
+% > 90 turn > 15
 	once
 	text A plague breaks out!
 	option Use medicine
@@ -109,7 +110,7 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 95 turn > 30
+% > 90 turn > 30
 	once
 	text You are menaced by raiders!
 	option Defend yourselves
@@ -131,7 +132,7 @@ food = 0
 	option OK
 		effects strength - 2
 
-% > 95 feeding >= 3
+% > 70 feeding >= 3
 	once
 	text The animal has a sore tooth!
 	option Treat it, carefully
@@ -173,7 +174,7 @@ food = 0
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 95 turn > 10
+% > 90 turn > 10
 	once
 	text The animal is suffering from giant parasites!
 	option Hunt them down
@@ -188,7 +189,7 @@ food = 0
 	option Watch the animal suffer
 		effects hope - 1 health - 3
 
-% > 85 turn > 5
+turn >= 9
 	once
 	text Who are you?
 	option Traders
@@ -202,7 +203,7 @@ food = 0
 	option Artisans
 		effects skip_trade_goods = 2
 
-% > 85 turn > 10
+turn >= 15
 	once
 	text What is the animal?
 	option A useful resource
