@@ -24,6 +24,9 @@ buyLeather
 
 buyHorses
 	text You enter a trading village.
+	option Sell wood
+		test wood >= 20
+		effects wood - 20 $ + 5
 	option Buy horses
 		test $ >= 5 horses = 0
 		effects horses = 1 $ - 5
@@ -36,6 +39,9 @@ buyHorses
 
 buyMeds
 	text You enter a trading village.
+	option Sell leather
+		test leather >= 20
+		effects leather - 20 $ + 5
 	option Buy horses
 		test $ >= 5 horses = 0
 		effects horses = 1 $ - 5
@@ -99,6 +105,9 @@ buyFurs
 	option Sell stone
 		test stone >= 20
 		effects stone - 20 $ + 5
+	option Sell leather
+		test leather >= 20
+		effects leather - 20 $ + 5
 	option Buy furs
 		test $ >= 5 furs = 0
 		effects furs = 1 $ - 5
@@ -202,12 +211,12 @@ emptyRuins
 lootRuins
 	text You find loot in the ruins!
 	option OK
-		effects $ + 10
+		effects $ + 10 hope - 1
 
 stoneRuins
 	text There's a lot of reusable stones in these ruins.
 	option OK
-		effects stone + 20 hope
+		effects stone + 20 hope - 1
 
 banditRuins
 	text A war band is leading away the survivors as slaves.

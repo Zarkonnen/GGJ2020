@@ -58,15 +58,16 @@ thirst < 10 % > 70
 		effects thirst + 5 water - 10
 	option Don't give it water
 
-health < 5 % > 70
+health < 12 % > 95
 	text The animal is sick!
 	option Heal it
 		test meds >= 10
-		effects health + 5 meds - 10
+		effects health + 3 meds - 10
 	option Send for the doctor
 		test meds >= 5 doctor = 1
-		effects health + 5 meds - 5
+		effects health + 3 meds - 5
 	option Don't heal it
+		effects health - 3
 
 water = 0
 	text You have run out of water!
@@ -93,7 +94,22 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 95 turn > 25
+% > 95 turn > 35
+	once
+	text A plague breaks out!
+	option Use medicine
+		test meds >= 5
+		effects meds - 5
+	option Send for the doctor
+		test meds >= 2 doctor = 1
+		effects meds - 2
+	option Send for the priest
+		test priest = 1
+		effects strength - 3 hope - 1
+	option Suffer through it
+		effects strength - 3 hope - 3
+
+% > 95 turn > 30
 	once
 	text You are menaced by raiders!
 	option Defend yourselves
