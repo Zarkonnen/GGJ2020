@@ -4,6 +4,10 @@ upkeep
 skip
 	effects $ + skip_trade_goods
 
+far_interact
+	test food - far_tile_food_cost
+	effects food - far_tile_food_cost
+
 buyLeather
 	text You enter a trading village.
 	option Sell wood

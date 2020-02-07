@@ -6,15 +6,18 @@ steer
 	name Steer
 	strength 5
 	test harness = 1
+	sound harness
 
 bribe
 	name Bribe
 	strength 3
 	test food >= 5
 	effects food - 5 feeding + 1 hunger + 2
+	sound eat
 
 whip
 	name Whip
 	strength 9
 	test whip = 1
 	effects health - 1
+	sound whip

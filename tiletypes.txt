@@ -1,50 +1,63 @@
 . Desert
 	graze thirst - 1
 	attraction 1
+	sound grass 0.6
 f Forest
 	graze hunger + 1 thirst + 1
 	harvest wood + logging
 	attraction 2
+	sound forest 0.7
 m Mountains
 	wall
 	harvest stone + mining
+	sound stone
 v Village
 	wall
 	harvest $ + trading
 	events buyLeather buyHorses buyStone buyMeds buyWater buyFood buyFurs
+	sound village
 w Water
 	harvest water + waterCarrying
 	graze thirst + 10
 	attraction 4
 	wallIfNot watertight
+	sound water 0.5
 b Bandits
 	wall
 	events bandits strongBandits slavers weakBandits
+	sound bandits
 F FruitTrees
 	graze hunger + 5 thirst + 1
 	harvest wood + logging food + 2
 	attraction 7
+	sound forest 0.7
 - Grassland
 	graze hunger + 2 thirst + 2
 	harvest food + 2
 	attraction 4
+	sound grass 1.2
 R Ruins
 	wall
 	harvest stone + 1 $ + scavenging
 	events plague emptyRuins lootRuins banditRuins stoneRuins
+	sound ruins
 H MedicalHerbs
 	graze hunger + 1 thirst + 1
 	harvest food + 1 meds + 2
 	attraction 5
+	sound grass
 C Cave
 	wall
 	harvest stone + mining stone + 1
 	events bears jewels empty lost monster
+	sound cave
 s Snow
 	graze thirst + 2
 	harvest wood + 1 water + 1
 	attraction 2
+	sound snow
 L Cattle
 	graze thirst + 1
 	harvest leather + hunting
 	attraction 3
+	sound hunt 0.8

@@ -44,19 +44,21 @@ hunger = 0
 	option Don't feed it
 		effects health - 5
 
-hunger < 10 % > 70
+hunger < 8 % > 70
 	text The animal is hungry!
 	option Feed it
 		test food >= 10
-		effects hunger + 5 food - 10
+		effects hunger + 7 food - 10
 	option Don't feed it
+		health - 1
 
-thirst < 10 % > 70
+thirst < 8 % > 70
 	text The animal is thirsty!
 	option Give it water
 		test water >= 10
-		effects thirst + 5 water - 10
+		effects thirst + 7 water - 10
 	option Don't give it water
+		health - 1
 
 health < 10 % > 85
 	once
@@ -80,7 +82,43 @@ food = 0
 	option Suffer
 		effects strength - 3 hope - 1
 
-% > 90 turn > 15
+% > 90 hope < 5 turn >= 10
+	once
+	text Your people are fighting each other!
+	option Ask the priest to calm them
+		test priest = 1
+	option Restore order through force
+		test warLeader = 1 strength >= 10
+		effects strength - 1
+	option Hand out lavish gifts
+		test $ >= 10
+		effects $ - 10
+	option Wait for the fighting to cease
+		effects strength - 3 hope - 2
+
+% > 85 hope < 9 strength > 16 warLeader = 1 priest = 1
+	once
+	text The war leader is seeking to oust the priest!
+	option Placate him with gifts
+		test $ >= 10
+		effects $ - 10 strength - 1
+	option Force out the war leader
+		effects strength - 3 warLeader = 0
+	option Dismiss the priest
+		effects priest = 0
+
+% > 85 hope < 7 doctor = 1 priest = 1
+	once
+	text The priest is denouncing the doctor!
+	option Build a great idol to appease the priest
+		test $ >= 5 stone >= 5
+		effects $ - 5 stone - 5
+	option Force out the priest
+		effects priest = 0 hope - 2
+	option Dismiss the doctor
+		effects doctor = 0
+
+% > 90 turn >= 15
 	once
 	text A plague breaks out!
 	option Use medicine
@@ -95,7 +133,7 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 95 turn > 35
+% > 95 turn >= 30
 	once
 	text A plague breaks out!
 	option Use medicine
@@ -110,7 +148,19 @@ food = 0
 	option Suffer through it
 		effects strength - 3 hope - 3
 
-% > 90 turn > 30
+% > 85 turn >= 30
+	once
+	text You are menaced by raiders!
+	option Defend yourselves
+		test strength >= 10
+		effects strength - 2 hope + 1
+	option Pay them off
+		test $ >= 10
+		effects $ - 10 hope - 1
+	option Endure
+		effects strength - 3 hope - 1 health - 1
+
+% > 90 turn >= 45
 	once
 	text You are menaced by raiders!
 	option Defend yourselves
@@ -150,6 +200,21 @@ food = 0
 	option Watch the animal suffer
 		effects hope - 1 health - 3
 
+% > 80 health < 10 turn >= 30
+	once
+	text The animal has injured one of its limbs!
+	option Treat it, carefully
+		test meds >= 10
+		effects meds - 10 hope + 1
+	option Have the engineer create a splint
+		test engineer = 1 wood >= 20
+		effects wood - 20 hope + 1
+	option Send for the doctor
+		test doctor = 1 meds >= 5
+		effects meds - 5
+	option The animal must hobble on
+		effects hope - 1 mvInterval + 1
+
 % > 95 onTile Desert
 	text The animal is suffering from dry skin!
 	option Wash it
@@ -174,7 +239,7 @@ food = 0
 		option Watch the animal suffer
 		effects hope - 1 health - 2
 
-% > 90 turn > 10
+% > 90 turn >= 10
 	once
 	text The animal is suffering from giant parasites!
 	option Hunt them down
@@ -194,8 +259,8 @@ turn >= 9
 	text Who are you?
 	option Traders
 		effects trading = 3
-	option Scavengers
-		effects scavenging = 2
+	option Explorers
+		effects vr + 1
 	option Fighters
 		effects strength + 2
 	option Pilgrims
@@ -216,7 +281,7 @@ turn >= 15
 		test health >= 18 whip = 0 harness = 0
 		effects hope + 3 worship = 1
 
-turn >= 30
+turn >= 37
 	once
 	text It's the new year!
 	option Have a feast
@@ -230,7 +295,7 @@ turn >= 30
 		effects wood - 5 hope + 3 health - 1
 	option Thank the animal with food
 		test food >= 10 whip = 0
-		effects hope + 3 health + 2 hunger + 5 feeding + 2
+		effects food - 10 hope + 3 health + 2 hunger + 5 feeding + 2
 	option Worship the animal
 		test worship = 1
 		effects hope + 5 hope + priest

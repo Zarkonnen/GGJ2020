@@ -54,3 +54,5 @@ pet Animal_Pet 0
 feeding Feeding_Treats 0 hidden
 watertight Watertight_Houses 0
 skip_trade_goods Trade_Goods_from_Skipping_Turns 1 hidden
+far_tile_food_cost Non-Adjacent_Tile_Interaction_Food_Cost 1 hidden
+mvInterval Turns_per_Move 4 hidden

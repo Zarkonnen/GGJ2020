@@ -1,6 +1,6 @@
 Scouts
-	test wood >= 15
-	effects wood - 10 vr = 4
+	test wood >= 10
+	effects wood - 10 vr + 1
 	desc Increase your sight radius by 1.
 
 Stables

@@ -10,7 +10,7 @@
         <script>
 
 function hwl(name, volume) {
-    return new Howl({src: ["sounds/" + name + ".ogg", "sounds/" + name + ".mp3", "sounds/" + name + ".wav"], volume: volume || 1});
+    return new Howl({src: ["sounds/" + name + ".wav"], volume: volume || 1});
 }
 
 const TILESZ = 100;
@@ -35,13 +35,18 @@ var triggered_events = [];
 var upgrades = [];
 var id_to_upgrade = {};
 var steeringTypes = [];
+var music = [];
 var event = null;
 var ready = false;
 var won = false;
 var lost = false;
+var playing = false;
+
+var upgradeSound = hwl("building");
 
 function upgrade(u) {
 	u.built = true;
+	upgradeSound.play();
 	effects(u.effects);
 }
 
@@ -235,6 +240,7 @@ function load() {
 	won = false;
 	lost = false;
 	splash = true;
+	playing = false;
 
 	ajax("vars.txt", function(data) {
 		vars = {};
@@ -307,6 +313,9 @@ function loadEvents(triggered) {
 				if (l.startsWith("effects ")) {
 					e.effects = l.substring(8).split(" ");
 				}
+				if (l.startsWith("test ")) {
+					e.test = l.substring(5).split(" ");
+				}
 				if (l.startsWith("option ")) {
 					o = {
 						text: l.substring(7),
@@ -336,6 +345,7 @@ function loadEvents(triggered) {
 					triggered_events.push(e);
 				} else {
 					e = {
+						test: [],
 						name: l,
 						once: false,
 						effects: [],
@@ -365,6 +375,11 @@ function wall(tt) {
 function loadTileTypes() {
 	ajax("tiletypes.txt", function(data) {
 		tileTypes = {};
+		for (var k in tileTypes) {
+			if (tileTypes[k].sound) {
+				tileTypes[k].sound.unload();
+			}
+		}
 		var lines = data.split("\n");
 		var tt = null;
 		for (var i = 0; i < lines.length; i++) {
@@ -381,6 +396,9 @@ function loadTileTypes() {
 				}
 				if (l[0] == "wallIfNot") {
 					tt.wallIfNot = l[1];
+				}
+				if (l[0] == "sound") {
+					tt.sound = hwl(l[1], l.length < 3 ? 1 : parseFloat(l[2]));
 				}
 				if (l[0] == "graze") {
 					l.splice(0, 1);
@@ -403,7 +421,8 @@ function loadTileTypes() {
 					wall: false,
 					graze: [],
 					harvest: [],
-					events: []
+					events: [],
+					sound: null
 				};
 				tileTypes[tt.symbol] = tt;
 			}
@@ -476,6 +495,10 @@ function loadSteeringTypes() {
 				if (l.startsWith("strength ")) {
 					t.strength = parseInt(l.substring(9));
 				}
+				if (l.startsWith("sound ")) {
+					l = l.substring(5).split(" ");
+					t.sound = hwl(l[1], l.length < 3 ? 1 : parseFloat(l[2]));
+				}
 			} else {
 				t = {
 					name: l,
@@ -488,6 +511,42 @@ function loadSteeringTypes() {
 		}
 		console.log(steeringTypes);
 		loadMap();
+	});
+}
+
+function loadMusic() {
+	ajax("music.txt", function(data) {
+		for (var i = 0; i < music.length; i++) {
+			music[i].howl.unload();
+		}
+		music = [];
+		var m = null;
+		var lines = data.split("\n");
+		for (var i = 0; i < lines.length; i++) {
+			var l = lines[i];
+			l = l.replace("\t", "    ")
+			if (l.trim() == "") { continue; }
+			if (l.startsWith("    ")) {
+				l = l.substring(4).split(" ");
+				var name = l[0];
+				l.splice(0, 1);
+				var inOut = l.map(function(x) { return parseFloat(x); });
+				m.params.push({
+					name: name,
+					inOut: inOut
+				});
+			} else {
+				m = {
+					name: l,
+					params: [],
+					howl: hwl(l),
+					volume: 0.00001
+				};
+				m.howl.loop(true);
+				music.push(m);
+			}
+		}
+		console.log(music);
 	});
 }
 
@@ -539,11 +598,16 @@ function turn() {
 }
 
 function move(dx, dy) {
-	setV("mvCooldown", 4);
+	setV("mvCooldown", v("mvInterval"));
 	setV("x", v("x") + dx);
 	setV("y", v("y") + dy);
 	effects(map[v("y")][v("x")].type.graze);
+	map[v("y")][v("x")].type.sound.play();
 	turn();
+}
+
+function adjacent(x, y) {
+	return (x - v("x")) * (x - v("x")) + (y - v("y")) * (y - v("y")) < 2 * 2;
 }
 
 function inRadius(x, y) {
@@ -592,10 +656,63 @@ function tick(ms) {
 	if (splash) {
 		c.drawImage(splashScreen, 0, 0, 1760, 990);
 		if (click) {
+			loadMusic();
 			splash = false;
 			click = null;
 		}
 		return;
+	}
+	
+	// Music
+	if (!playing) {
+		var canPlay = true;
+		for (var i = 0; i < music.length; i++) {
+			if (music[i].howl.state() != "loaded") {
+				canPlay = false;
+			}
+		}
+		if (canPlay) {
+			for (var i = 0; i < music.length; i++) {
+				music[i].howl.play();
+			}
+			playing = true;
+		}
+	}
+	for (var i = 0; i < music.length; i++) {
+		var m = music[i];
+		var volume = 1.0;
+		for (var j = 0; j < m.params.length; j++) {
+			var p = m.params[j];
+			var value = 0;
+			var out = 1;
+			if (tileTypes[p.name]) {
+				value = map[v("y")][v("x")].type.symbol == p.name ? 1 : 0;
+			} else {
+				try {
+					value = v(p.name);
+				} catch (e) {
+					console.log("Unknown music parameter: " + p.name);
+				}
+			}
+			if (value <= p.inOut[0]) {
+				out = p.inOut[1];
+			} else if (value >= p.inOut[p.inOut.length - 2]) {
+				out = p.inOut[p.inOut.length - 1];
+			} else {
+				for (var k = 0; k < p.inOut.length - 2; k += 2) {
+					if (value >= p.inOut[k]) {
+						out = p.inOut[k + 1] + (p.inOut[k + 3] - p.inOut[k + 1]) * 1.0 * (value - p.inOut[k]) / (p.inOut[k + 2] - p.inOut[k]);
+					}
+				}
+			}
+			volume *= out;
+		}
+		volume = Math.min(1, volume) * 0.5;
+		//console.log(m.name + ": " + volume);
+		if (volume != m.volume) {
+			m.howl.fade(m.volume, volume, 500);
+		}
+		m.volume = volume;
 	}
 	
     c.fillStyle = "#130d0a";
@@ -761,6 +878,9 @@ function tick(ms) {
 					c.fillStyle = "rgba(255, 255, 255, 0.5)";
 					c.fillRect(x, y, TILESZ, TILESZ);
 					if (click) {
+						if (steeringType.sound) {
+							steeringType.sound.play();
+						}
 						effects(steeringType.effects);
 						move(1, dy);
 					}
@@ -812,7 +932,18 @@ function tick(ms) {
 						c.fillStyle = "#130d0a";
 						
 						fillText(text, screenX + 5, screenY + TILESZ + 20);
-						if (click) {
+						if (!adjacent(x, y)) {
+							text = "Cost: " + format(named_events["far_interact"].test);
+							c.fillStyle = "#906b4e";
+							c.fillRect(screenX, screenY + TILESZ + 30, c.measureText(text).width + 10, 30);
+							c.fillStyle = "#130d0a";
+							fillText(text, screenX + 5, screenY + TILESZ + 50);
+						}
+						if (click && (adjacent(x, y) || test(named_events["far_interact"].test))) {
+							if (!adjacent(x, y)) {
+								effects(named_events["far_interact"].effects);
+							}
+							tile.type.sound.play();
 							if (!tile.done && tile.type.events.length > 0) {
 								tileEvent(tile);
 							} else {
@@ -900,6 +1031,17 @@ function tick(ms) {
 		c.font = "20px Arial";
 		y += 57;
 	}
+	
+	/*
+	for (var i = 0; i < music.length; i++) {
+		c.fillStyle = "#906b4e";
+		c.fillText(music[i].name, canvas.width - 260, canvas.height - music.length * 30 + i * 30);
+		c.fillStyle = "#5d3f2a";
+		c.fillRect(canvas.width - 120, canvas.height - music.length * 30 + i * 30 - 18, 100, 20);
+		c.fillStyle = "#906b4e";
+		c.fillRect(canvas.width - 120, canvas.height - music.length * 30 + i * 30 - 18, 100 * music[i].volume, 20);
+	}
+	*/
 	click = null;
 }
 
