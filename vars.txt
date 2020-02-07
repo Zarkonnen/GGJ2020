@@ -9,7 +9,7 @@ wood Wood 10 min 0 icon Wood
 stone Stone 0 min 0 icon Stone
 meds Medicine 0 min 0 icon Medicine
 leather Leather 0 min 0 icon Leather
-$ Trade_Goods 5 min 0 icon TradingGoods
+$ Trade_Goods 7 min 0 icon TradingGoods
 x x 2 hidden
 y y 6 hidden
 % % 0 hidden
@@ -28,6 +28,7 @@ harvesters_- Collect 1 hidden
 harvesters_R Scavenge 1 hidden
 harvesters_H Collect 1 hidden
 harvesters_C Mine 1 hidden
+harvesters_O Mine 1 hidden
 harvesters_s Harvest 1 hidden
 harvesters_L Hunt 1 hidden
 whip Forcible_Steering 0 hidden

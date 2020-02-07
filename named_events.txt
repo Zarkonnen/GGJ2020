@@ -12,16 +12,16 @@ buyLeather
 	text You enter a trading village.
 	option Sell wood
 		test wood >= 20
-		effects wood - 20 $ + 5
+		effects wood - 20 $ + 7
 	option Buy leather
-		test $ >= 5
-		effects leather + 15 $ - 5
+		test $ >= 7
+		effects leather + 15 $ - 7
 	option Recruit War Leader
-		test $ >= 8 warLeader = 0
-		effects $ - 8 warLeader = 1 strength + 3
+		test $ >= 7 warLeader = 0
+		effects $ - 7 warLeader = 1 strength + 3
 	option Recruit Engineer
-		test $ >= 8 engineer = 0
-		effects $ - 8 engineer = 1
+		test $ >= 7 engineer = 0
+		effects $ - 7 engineer = 1
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -30,13 +30,13 @@ buyHorses
 	text You enter a trading village.
 	option Sell wood
 		test wood >= 20
-		effects wood - 20 $ + 5
+		effects wood - 20 $ + 7
 	option Buy horses
-		test $ >= 5 horses = 0
-		effects horses = 1 $ - 5
+		test $ >= 7 horses = 0
+		effects horses = 1 $ - 7
 	option Recruit War Leader
-		test $ >= 8 warLeader = 0
-		effects $ - 8 warLeader = 1 strength + 3
+		test $ >= 7 warLeader = 0
+		effects $ - 7 warLeader = 1 strength + 3
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -45,13 +45,13 @@ buyMeds
 	text You enter a trading village.
 	option Sell leather
 		test leather >= 20
-		effects leather - 20 $ + 5
+		effects leather - 20 $ + 7
 	option Buy horses
-		test $ >= 5 horses = 0
-		effects horses = 1 $ - 5
+		test $ >= 7 horses = 0
+		effects horses = 1 $ - 7
 	option Buy medicine
-		test $ >= 5
-		effects meds + 10 $ - 5
+		test $ >= 7
+		effects meds + 10 $ - 7
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -60,13 +60,13 @@ buyWater
 	text You enter a trading village.
 	option Sell food
 		test food >= 20
-		effects food - 20 $ + 5
+		effects food - 20 $ + 7
 	option Buy water
-		test $ >= 5
-		effects water + 15 $ - 5
+		test $ >= 7
+		effects water + 15 $ - 7
 	option Recruit Engineer
-		test $ >= 8 engineer = 0
-		effects $ - 8 engineer = 1
+		test $ >= 7 engineer = 0
+		effects $ - 7 engineer = 1
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -75,13 +75,13 @@ buyStone
 	text You enter a trading village.
 	option Sell water
 		test water >= 20
-		effects water - 20 $ + 5
+		effects water - 20 $ + 7
 	option Buy stone
-		test $ >= 5
-		effects stone + 15 $ - 5
+		test $ >= 7
+		effects stone + 15 $ - 7
 	option Recruit Priest
-		test $ >= 8 priest = 0
-		effects $ - 8 priest = 1
+		test $ >= 7 priest = 0
+		effects $ - 7 priest = 1
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -90,16 +90,16 @@ buyFood
 	text You enter a trading village.
 	option Sell leather
 		test leather >= 20
-		effects leather - 20 $ + 5
+		effects leather - 20 $ + 7
 	option Buy food
-		test $ >= 5
-		effects food + 15 $ - 5
+		test $ >= 7
+		effects food + 15 $ - 7
 	option Recruit Doctor
-		test $ >= 8 doctor = 0
-		effects $ - 8 doctor = 1
+		test $ >= 7 doctor = 0
+		effects $ - 7 doctor = 1
 	option Recruit Engineer
-		test $ >= 8 engineer = 0
-		effects $ - 8 engineer = 1
+		test $ >= 7 engineer = 0
+		effects $ - 7 engineer = 1
 	option Trade Valuables
 		effects $ + 2
 	option Leave
@@ -108,19 +108,36 @@ buyFurs
 	text You enter a trading village.
 	option Sell stone
 		test stone >= 20
-		effects stone - 20 $ + 5
+		effects stone - 20 $ + 7
 	option Sell leather
 		test leather >= 20
-		effects leather - 20 $ + 5
+		effects leather - 20 $ + 7
 	option Buy furs
-		test $ >= 5 furs = 0
-		effects furs = 1 $ - 5
+		test $ >= 7 furs = 0
+		effects furs = 1 $ - 7
 	option Buy medicine
-		test $ >= 5
-		effects meds + 10 $ - 5
+		test $ >= 7
+		effects meds + 10 $ - 7
 	option Trade Valuables
 		effects $ + 2
 	option Leave
+
+monastery
+	text This village is actually a monastery.
+	option Speak of the worship of the animal
+		test worship = 1
+		effects hope + 3
+	option Accept a Priest
+		test priest = 0
+		effects priest = 1
+	option Ask for help with food
+		test food < 10
+		effects food + 10
+	option Ask for help with water
+		test water < 10
+		effects water + 10
+	option Accept their hospitality
+		effects strength + 1 hope + 1
 
 bandits
 	text You enter a bandit camp.
@@ -232,3 +249,10 @@ banditRuins
 		effects strength + 5 $ - 5 hope - 4
 	option Leave
 		effects hope - 2
+
+tunnel
+	text A giant tunnel heading towards the sea.
+	option Travel through
+		test food >= 10 water >= 10
+		effects food - 10 water - 10 turn + 10 x = 23 y = 4
+	option Leave

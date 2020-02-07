@@ -72,6 +72,24 @@ health < 10 % > 85
 	option Don't heal it
 		effects health - 3
 
+health < 10 health > 3 strength >= 5 worship = 0 pet = 0
+	once
+	text The animal is angry! It's trying to shake you off!
+	option Use ropes to hold on
+		test leather >= 5
+		effects leather - 5 strength - 1
+	option Administer a sedative
+		test meds >= 5 doctor = 1
+		effects meds - 5
+	option Use the whip
+		test whip = 1
+		effects health - 3
+	option Feed it treats
+		test food >= 10
+		effects food - 10 hunger + 5 feeding + 2
+	option Wait for it to calm down
+		effects strength - 3 hope - 1
+
 water = 0
 	text You have run out of water!
 	option Suffer

@@ -43,6 +43,8 @@ var lost = false;
 var playing = false;
 
 var upgradeSound = hwl("building");
+var clickSound = hwl("click");
+var eventSound = hwl("click");
 
 function upgrade(u) {
 	u.built = true;
@@ -68,6 +70,7 @@ function triggerEvents() {
 		if (e.used) { continue; }
 		if (test(e.test)) {
 			invoke(e);
+			eventSound.play();
 			return;
 		}
 	}
@@ -80,6 +83,7 @@ function triggerInstants() {
 		if (e.used || !e.instant) { continue; }
 		if (test(e.test)) {
 			console.log(e.text);
+			eventSound.play();
 			invoke(e);
 			return;
 		}
@@ -400,6 +404,9 @@ function loadTileTypes() {
 				if (l[0] == "sound") {
 					tt.sound = hwl(l[1], l.length < 3 ? 1 : parseFloat(l[2]));
 				}
+				if (l[0] == "moveSound") {
+					tt.moveSound = hwl(l[1], l.length < 3 ? 1 : parseFloat(l[2]));
+				}
 				if (l[0] == "graze") {
 					l.splice(0, 1);
 					tt.graze = l;
@@ -422,7 +429,8 @@ function loadTileTypes() {
 					graze: [],
 					harvest: [],
 					events: [],
-					sound: null
+					sound: null,
+					moveSound: null
 				};
 				tileTypes[tt.symbol] = tt;
 			}
@@ -602,7 +610,9 @@ function move(dx, dy) {
 	setV("x", v("x") + dx);
 	setV("y", v("y") + dy);
 	effects(map[v("y")][v("x")].type.graze);
-	map[v("y")][v("x")].type.sound.play();
+	if (map[v("y")][v("x")].type.moveSound) {
+		map[v("y")][v("x")].type.moveSound.play();
+	}
 	turn();
 }
 
@@ -803,6 +813,7 @@ function tick(ms) {
 					c.fillStyle = "#c08f68";
 					if (click) {
 						event = null;
+						clickSound.play();
 						effects(o.effects);
 						triggerInstants();
 						break lp;
@@ -903,6 +914,7 @@ function tick(ms) {
 			if (cursor.x > 840 && cursor.x < 840 + sw && cursor.y > 20 && cursor.y < 50) {
 				c.fillStyle = "#c08f68";
 				if (click) {
+					clickSound.play();
 					effects(named_events["skip"].effects);
 					turn();
 				}
@@ -943,7 +955,9 @@ function tick(ms) {
 							if (!adjacent(x, y)) {
 								effects(named_events["far_interact"].effects);
 							}
-							tile.type.sound.play();
+							if (tile.type.sound) {
+								tile.type.sound.play();
+							}
 							if (!tile.done && tile.type.events.length > 0) {
 								tileEvent(tile);
 							} else {
