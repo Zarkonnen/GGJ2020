@@ -17,6 +17,19 @@ const TILESZ = 100;
 const HUNGER_ATTRACTION_DECREASE = 0.2;
 const THIRST_ATTRACTION_DECREASE = 0.2;
 
+var introText = ["Your people live in a city on the animal, a gigantic turtle.",
+"It is time for her to go to the ocean and lay her eggs.",
+"Can you survive the trip?",
+"Click on a tile to send people there, to harvest resources",
+"or interact. Every three turns, the turtle moves onto a tile",
+"to the right."];
+
+var outroText = ["At last, you have reached the ocean. There is fishing here,",
+"and small streams that produce ample water. The animal can lay",
+"her eggs, each the size of a house. You can rest at last."];
+
+var defeatText = ["You did not reach the ocean."];
+
 // Load data
 function ajax(file, callback) {
 	jQuery.ajax({
@@ -38,9 +51,11 @@ var steeringTypes = [];
 var music = [];
 var event = null;
 var ready = false;
+var intro = true;
 var won = false;
 var lost = false;
 var playing = false;
+var musicSpecified = false;
 
 var upgradeSound = hwl("building");
 var clickSound = hwl("click");
@@ -245,6 +260,8 @@ function load() {
 	lost = false;
 	splash = true;
 	playing = false;
+	musicSpecified = false;
+	intro = true;
 
 	ajax("vars.txt", function(data) {
 		vars = {};
@@ -555,6 +572,7 @@ function loadMusic() {
 			}
 		}
 		console.log(music);
+		musicSpecified = true;
 	});
 }
 
@@ -674,55 +692,58 @@ function tick(ms) {
 	}
 	
 	// Music
-	if (!playing) {
-		var canPlay = true;
-		for (var i = 0; i < music.length; i++) {
-			if (music[i].howl.state() != "loaded") {
-				canPlay = false;
-			}
-		}
-		if (canPlay) {
+	if (musicSpecified) {
+		if (!playing) {
+			var canPlay = true;
 			for (var i = 0; i < music.length; i++) {
-				music[i].howl.play();
-			}
-			playing = true;
-		}
-	}
-	for (var i = 0; i < music.length; i++) {
-		var m = music[i];
-		var volume = 1.0;
-		for (var j = 0; j < m.params.length; j++) {
-			var p = m.params[j];
-			var value = 0;
-			var out = 1;
-			if (tileTypes[p.name]) {
-				value = map[v("y")][v("x")].type.symbol == p.name ? 1 : 0;
-			} else {
-				try {
-					value = v(p.name);
-				} catch (e) {
-					console.log("Unknown music parameter: " + p.name);
+				if (music[i].howl.state() != "loaded") {
+					console.log(music[i].howl.state());
+					canPlay = false;
 				}
 			}
-			if (value <= p.inOut[0]) {
-				out = p.inOut[1];
-			} else if (value >= p.inOut[p.inOut.length - 2]) {
-				out = p.inOut[p.inOut.length - 1];
-			} else {
-				for (var k = 0; k < p.inOut.length - 2; k += 2) {
-					if (value >= p.inOut[k]) {
-						out = p.inOut[k + 1] + (p.inOut[k + 3] - p.inOut[k + 1]) * 1.0 * (value - p.inOut[k]) / (p.inOut[k + 2] - p.inOut[k]);
+			if (canPlay) {
+				for (var i = 0; i < music.length; i++) {
+					music[i].howl.play();
+				}
+				playing = true;
+			}
+		}
+		for (var i = 0; i < music.length; i++) {
+			var m = music[i];
+			var volume = 1.0;
+			for (var j = 0; j < m.params.length; j++) {
+				var p = m.params[j];
+				var value = 0;
+				var out = 1;
+				if (tileTypes[p.name]) {
+					value = map[v("y")][v("x")].type.symbol == p.name ? 1 : 0;
+				} else {
+					try {
+						value = v(p.name);
+					} catch (e) {
+						console.log("Unknown music parameter: " + p.name);
 					}
 				}
+				if (value <= p.inOut[0]) {
+					out = p.inOut[1];
+				} else if (value >= p.inOut[p.inOut.length - 2]) {
+					out = p.inOut[p.inOut.length - 1];
+				} else {
+					for (var k = 0; k < p.inOut.length - 2; k += 2) {
+						if (value >= p.inOut[k]) {
+							out = p.inOut[k + 1] + (p.inOut[k + 3] - p.inOut[k + 1]) * 1.0 * (value - p.inOut[k]) / (p.inOut[k + 2] - p.inOut[k]);
+						}
+					}
+				}
+				volume *= out;
 			}
-			volume *= out;
+			volume = Math.min(1, volume) * 0.5;
+			//console.log(m.name + ": " + volume);
+			if (volume != m.volume) {
+				m.howl.fade(m.volume, volume, 500);
+			}
+			m.volume = volume;
 		}
-		volume = Math.min(1, volume) * 0.5;
-		//console.log(m.name + ": " + volume);
-		if (volume != m.volume) {
-			m.howl.fade(m.volume, volume, 500);
-		}
-		m.volume = volume;
 	}
 	
     c.fillStyle = "#130d0a";
@@ -768,22 +789,94 @@ function tick(ms) {
 	
 	if (won) {
 		c.font = "80px Arial";
+		var ww = c.measureText("VICTORY").width;
 		c.fillStyle = "#906b4e";
-		c.fillRect(420, 20, 400, 90);
+		c.fillRect(420, 20, ww + 40, 90);
 		c.fillStyle = "#130d0a";
 		fillText("VICTORY", 440, 90);
-		if (click) {
-			load();
+		c.font = "20px Arial";
+		ww = 0;
+		for (var i = 0; i < outroText.length; i++) {
+			ww = Math.max(ww, c.measureText(outroText[i]).width + 20);
 		}
+		c.fillStyle = "#906b4e";
+		c.fillRect(420, 95 + 20, ww, 30 * outroText.length);
+		c.fillStyle = "#130d0a";
+		for (var i = 0; i < outroText.length; i++) {
+			fillText(outroText[i], 430, 95 + i * 30 + 40);
+		}
+		c.fillStyle = "#533b2b";
+		ww = c.measureText("OK").width + 20;
+		c.fillRect(440 - 2, 95 + 20 + outroText.length * 30 - 2 + 5, ww + 4, 30 + 4);
+		c.fillStyle = "#906b4e";
+		if (cursor.x > 440 && cursor.x < 440 + ww && cursor.y > 95 + 20 + outroText.length * 30 - 2 + 5 && cursor.y < 95 + 20 + outroText.length * 30 - 2 + 5 + 30) {
+			c.fillStyle = "#c08f68";
+			if (click) {
+				clickSound.play();
+				load();
+			}
+		}
+		c.fillRect(440, 95 + 20 + outroText.length * 30 + 5, ww, 30);
+		c.fillStyle = "#130d0a";
+		fillText("OK", 450, 95 + 40 + outroText.length * 30 + 5);
 	} else if (lost) {
 		c.font = "80px Arial";
+		var ww = c.measureText("DEFEAT").width;
 		c.fillStyle = "#906b4e";
-		c.fillRect(420, 20, 400, 90);
+		c.fillRect(420, 20, ww + 40, 90);
 		c.fillStyle = "#130d0a";
 		fillText("DEFEAT", 440, 90);
-		if (click) {
-			load();
+		c.font = "20px Arial";
+		ww = 0;
+		for (var i = 0; i < defeatText.length; i++) {
+			ww = Math.max(ww, c.measureText(defeatText[i]).width + 20);
 		}
+		c.fillStyle = "#906b4e";
+		c.fillRect(420, 95 + 20, ww, 30 * defeatText.length);
+		c.fillStyle = "#130d0a";
+		for (var i = 0; i < defeatText.length; i++) {
+			fillText(defeatText[i], 430, 95 + i * 30 + 40);
+		}
+		c.fillStyle = "#533b2b";
+		ww = c.measureText("OK").width + 20;
+		c.fillRect(440 - 2, 95 + 20 + defeatText.length * 30 - 2 + 5, ww + 4, 30 + 4);
+		c.fillStyle = "#906b4e";
+		if (cursor.x > 440 && cursor.x < 440 + ww && cursor.y > 95 + 20 + defeatText.length * 30 - 2 + 5 && cursor.y < 95 + 20 + defeatText.length * 30 - 2 + 5 + 30) {
+			c.fillStyle = "#c08f68";
+			if (click) {
+				clickSound.play();
+				load();
+			}
+		}
+		c.fillRect(440, 95 + 20 + defeatText.length * 30 + 5, ww, 30);
+		c.fillStyle = "#130d0a";
+		fillText("OK", 450, 95 + 40 + defeatText.length * 30 + 5);
+	} else if (intro) {
+		c.font = "20px Arial";
+		var ww = 0;
+		for (var i = 0; i < introText.length; i++) {
+			ww = Math.max(ww, c.measureText(introText[i]).width + 20);
+		}
+		c.fillStyle = "#906b4e";
+		c.fillRect(420, 20, ww, 30 * introText.length);
+		c.fillStyle = "#130d0a";
+		for (var i = 0; i < introText.length; i++) {
+			fillText(introText[i], 430, i * 30 + 40);
+		}
+		c.fillStyle = "#533b2b";
+		ww = c.measureText("OK").width + 20;
+		c.fillRect(440 - 2, 20 + introText.length * 30 - 2 + 5, ww + 4, 30 + 4);
+		c.fillStyle = "#906b4e";
+		if (cursor.x > 440 && cursor.x < 440 + ww && cursor.y > 20 + introText.length * 30 - 2 + 5 && cursor.y < 20 + introText.length * 30 - 2 + 5 + 30) {
+			c.fillStyle = "#c08f68";
+			if (click) {
+				intro = false;
+				clickSound.play();
+			}
+		}
+		c.fillRect(440, 20 + introText.length * 30 + 5, ww, 30);
+		c.fillStyle = "#130d0a";
+		fillText("OK", 450, 40 + introText.length * 30 + 5);
 	} else if (event) {
 		// Event UI
 		var y = 20;
@@ -1023,9 +1116,9 @@ function tick(ms) {
 		c.fillStyle = "#533b2b";
 		c.fillRect(20 - 2, y - 2, 360 + 4, 52 + 4);
 		if ((test(u.test) && v("mvCooldown") > 0) || u.built) {
-			if (u.built || (cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 52)) {
+			if (u.built || (!won && !lost && !intro && !event && cursor.x > 20 && cursor.x < 20 + 360 && cursor.y > y && cursor.y < y + 52)) {
 				c.fillStyle = "#c08f68";
-				if (!u.built && click) {
+				if (!won && !lost && !intro && !event && !u.built && click) {
 					upgrade(u);
 					turn();
 				}
