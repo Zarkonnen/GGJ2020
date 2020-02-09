@@ -1,0 +1,1 @@
+electron-packager . "TurtleTown" --icon .\graphics\icon.ico --all
